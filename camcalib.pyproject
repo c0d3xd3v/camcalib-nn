@@ -1,0 +1,13 @@
+{
+    "files": [
+        "DataSetGeneration/CustomImageDataset.py",
+        "DataSetGeneration/continuous_dataset_generation.py",
+        "DataSetGeneration/my_interpol.py",
+        "CNN/DeepCalibOutputLayer.py",
+        "Visualization/ImageVisTools.py",
+        "generate.py",
+        "train.py",
+        "predict.py",
+        "DataSetGeneration/NormalizeData.py"
+    ]
+}
