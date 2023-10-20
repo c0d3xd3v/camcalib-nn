@@ -36,11 +36,7 @@ if __name__ == '__main__':
     output_dir = "continouse_dataset/"
 
     #clearOutputFolder(output_dir)
-    if not path.exists(output_dir):
-        generateNumImages(path_to_360_images, output_dir, 300)
-    else:
-        dir = os.listdir(output_dir)
-        if len(dir) == 0:
-            generateNumImages(path_to_360_images, output_dir, 300)
-        print("data already there, skip data generation")
+
+    generateNumImages(path_to_360_images, output_dir, 300)
+    print("data already there, skip data generation")
     #generate(path_to_360_images, output_dir)
