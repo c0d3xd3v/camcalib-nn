@@ -35,5 +35,5 @@ if __name__ == '__main__':
     output_dir = "continouse_dataset/"
 
     clearOutputFolder(output_dir)
-    generateNumImages(path_to_360_images, output_dir, 100)
+    generateNumImages(path_to_360_images, output_dir, 300)
     #generate(path_to_360_images, output_dir)
