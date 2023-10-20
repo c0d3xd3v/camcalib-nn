@@ -1,6 +1,7 @@
 # export set PYTHONPATH=/home/kai/Development/densnet-pytorch/DeepCalib/dataset/:/home/kai/Development/densnet-pytorch/DeepCalib/network_training/Regression/Single_net/
 
 import os, time, glob
+from os import path
 
 import DataSetGeneration.continuous_dataset_generation as DeepCalibDataset
 
@@ -35,9 +36,11 @@ if __name__ == '__main__':
     output_dir = "continouse_dataset/"
 
     #clearOutputFolder(output_dir)
-    dir = os.listdir(output_dir)
-    if len(dir) == 0:
+    if not path.exists(output_dir):
         generateNumImages(path_to_360_images, output_dir, 300)
     else:
+        dir = os.listdir(output_dir)
+        if len(dir) == 0:
+            generateNumImages(path_to_360_images, output_dir, 300)
         print("data already there, skip data generation")
     #generate(path_to_360_images, output_dir)
