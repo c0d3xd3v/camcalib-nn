@@ -36,7 +36,7 @@ def loadDeepCaliData(labels_file, img_dir):
     dataset =  CustomImageDataset(labels_file, img_dir, 
                     transform=Compose([ToPILImage(), ToTensor()]), 
                     target_transform=Compose([float]))
-    train_dataloader = DataLoader(dataset, batch_size=8, shuffle=True)
+    train_dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
     return train_dataloader
 
 def batch_mean_and_sd(loader):
