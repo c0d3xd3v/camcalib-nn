@@ -46,16 +46,16 @@ jobs:
               pip install gdown
               python --version
 
-      - name: Zip build
-        working-directory: ${{ env.SOURCE_DIR }}
-        run:  |
-              7z a ${{ env.ARTIFACT }} ${{ env.INSTALL_DIRECTORY }}/* -r
+#      - name: Zip build
+#        working-directory: ${{ env.SOURCE_DIR }}
+#        run:  |
+#              7z a ${{ env.ARTIFACT }} ${{ env.INSTALL_DIRECTORY }}/* -r
 
-      - name: Save build artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ env.ARTIFACT }}
-          path: ${{ env.SOURCE_DIR }}/${{ env.ARTIFACT }} 
+#      - name: Save build artifact
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: ${{ env.ARTIFACT }}
+#          path: ${{ env.SOURCE_DIR }}/${{ env.ARTIFACT }} 
 
 #      - name: AppImage
 #        working-directory: ${{ env.SOURCE_DIR }}/build
