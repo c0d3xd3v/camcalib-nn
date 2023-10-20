@@ -40,6 +40,7 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
+              pip install gdown
               python --version
 
       - name: Create build directory
