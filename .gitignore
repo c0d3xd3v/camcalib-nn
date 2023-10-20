@@ -1,4 +1,4 @@
 __pycache__
 *.pt
 *.user
-*.jpg
+#*.jpg
