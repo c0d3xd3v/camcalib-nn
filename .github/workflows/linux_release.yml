@@ -43,7 +43,7 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              pip install numpy torch torchvision pillow
+              pip install numpy torch torchvision pillow opencv2-python
               python --version
               python generate.py
 
