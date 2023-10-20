@@ -35,7 +35,7 @@ if __name__ == '__main__':
     path_to_360_images = 'data/*.jpg'
     output_dir = "continouse_dataset/"
 
-    #clearOutputFolder(output_dir)
+    clearOutputFolder(output_dir)
 
     generateNumImages(path_to_360_images, output_dir, 300)
     print("data already there, skip data generation")
