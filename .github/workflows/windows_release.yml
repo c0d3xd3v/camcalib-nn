@@ -34,7 +34,6 @@ jobs:
 
       - name: Build
         working-directory: ${{ runner.temp }}\build
-        env:
         run:  |
               python --version
       - name: Zip build
