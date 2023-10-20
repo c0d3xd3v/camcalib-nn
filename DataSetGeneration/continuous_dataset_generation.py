@@ -43,7 +43,7 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
         grid_x, grid_y = np.meshgrid(range(W), range(H))
         
         csv_file = open(output_path + 'labels.csv', 'a', newline='')   
-        for i in range(1):
+        for i in range(100):
             while True:
                 x_ref = 1
                 y_ref = 1
