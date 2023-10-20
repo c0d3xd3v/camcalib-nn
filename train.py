@@ -7,7 +7,7 @@ from DataSetGeneration.CustomImageDataset import *
 from CNN.DeepCalibOutputLayer import *
 
 
-output_dir = "/home/kai/Development/densnet-pytorch/continouse_dataset/"
+output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 

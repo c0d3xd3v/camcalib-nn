@@ -46,6 +46,7 @@ jobs:
               pip install numpy torch torchvision pillow opencv-python
               python --version
               python generate.py
+              python train.py
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}
