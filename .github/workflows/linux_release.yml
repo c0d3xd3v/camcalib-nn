@@ -36,7 +36,7 @@ jobs:
       - name: Cache Build
         uses: actions/cache@v3
         with: 
-          path: ${{ env.SOURCE_DIR }}/build
+          path: ${{ env.SOURCE_DIR }}/continouse_dataset
           key: ubuntu-build
           restore-keys: ubuntu-build
 
