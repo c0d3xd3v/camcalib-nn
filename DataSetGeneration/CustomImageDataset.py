@@ -74,6 +74,6 @@ def loadDeepCaliDataNormalized(labels_file, img_dir):
                         torchvision.transforms.Normalize(mean = mean, std= std)]),
                         target_transform=Compose([float]))
 
-    normalized_train_dataloader = DataLoader(normalized_dataset, batch_size=8, shuffle=True)
+    normalized_train_dataloader = DataLoader(normalized_dataset, batch_size=32, shuffle=True)
 
     return normalized_train_dataloader

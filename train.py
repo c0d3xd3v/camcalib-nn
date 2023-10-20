@@ -18,7 +18,7 @@ inceptionV3.fc = FocAndDisOut()
 inceptionV3.aux_logits = False
 #inceptionV3 = torch.load("deepcalib1.pt")
 
-train_dataloader = loadDeepCaliDataNormalized(labels_file, img_dir) #loadDeepCaliData(labels_file, img_dir)
+train_dataloader = loadDeepCaliData(labels_file, img_dir) #loadDeepCaliData(labels_file, img_dir)
 
 loss_fn = LogCoshLoss()
 inceptionV3.train()
