@@ -31,8 +31,8 @@ def generateNumImages(path_to_360_images, output_dir, num):
     print("elapsed time ", time.process_time() - starttime)
 
 if __name__ == '__main__':
-    path_to_360_images = '/home/kai/Development/densnet-pytorch/SUN360/train/RGB/*.jpg'
-    output_dir = "/home/kai/Development/densnet-pytorch/continouse_dataset/"
+    path_to_360_images = 'data/*.jpg'
+    output_dir = "continouse_dataset/"
 
     clearOutputFolder(output_dir)
     generateNumImages(path_to_360_images, output_dir, 100)

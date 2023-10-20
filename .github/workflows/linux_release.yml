@@ -45,7 +45,7 @@ jobs:
         run:  |
               pip install gdown
               python --version
-              python download_sun360.py
+              python generate.py
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}
