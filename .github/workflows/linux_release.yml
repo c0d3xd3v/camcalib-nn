@@ -30,13 +30,6 @@ jobs:
         run: |
           git fetch --all --tags -f    
           
-      - name: Download from Google Drive
-        uses: satackey/action-google-drive@v1
-        with:
-#          skicka-tokencache-json: ${{ secrets.SKICKA_TOKENCACHE_JSON }}
-          download-from: https://drive.google.com/drive/folders/1ooaYwvNuFd-iEEcmOQHpLunJEmo7b4NM
-          download-to: ${{ env.SOURCE_DIR }}/dataset
-
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
