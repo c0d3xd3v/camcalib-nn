@@ -142,7 +142,7 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
             name = image360_path.split('/')[-1]
             name_list = name.split('.')
 
-            print("f : " + str(f) + ", d : " + str(xi))
+            #print("f : " + str(f) + ", d : " + str(xi))
             #print(output_path + name_list[0] +'_f_'+str(f)+'_d_'+str(xi)+ '.' +name_list[-1])
             if skip == False:
                 writer = csv.writer(csv_file)
