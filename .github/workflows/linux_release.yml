@@ -33,7 +33,7 @@ jobs:
           git fetch --all --tags -f    
           
       - name: Create build directory
-        run:  mkdir ${{ env.SOURCE_DIR }}/build
+        run:  mkdir ${{ env.SOURCE_DIR }}/continouse_dataset
 
       - name: Cache Build
         uses: actions/cache@v3
