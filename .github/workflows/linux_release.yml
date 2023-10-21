@@ -45,8 +45,8 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-#              pip install numpy torch torchvision pillow opencv-python pandas
               python --version
+#              pip install numpy torch torchvision pillow opencv-python pandas
 #              python generate.py
 #              python train.py
 
