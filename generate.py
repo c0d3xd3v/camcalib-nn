@@ -35,8 +35,11 @@ if __name__ == '__main__':
     path_to_360_images = 'data/*.jpg'
     output_dir = "continouse_dataset/"
 
-    clearOutputFolder(output_dir)
-
-    generateNumImages(path_to_360_images, output_dir, 300)
-    print("data already there, skip data generation")
-    #generate(path_to_360_images, output_dir)
+    #clearOutputFolder(output_dir)
+    if os. path. exists(output_dir):
+        if len(os.listdir(output_dir)) == 0:
+            generate(path_to_360_images, output_dir)
+        else:
+            print("use cached data ...")
+    else:
+        generate(path_to_360_images, output_dir)
