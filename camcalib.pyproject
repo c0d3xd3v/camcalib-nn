@@ -9,6 +9,7 @@
         "train.py",
         "predict.py",
         "DataSetGeneration/NormalizeData.py",
-        ".github/workflows/linux_release.yml"
+        ".github/workflows/linux_release.yml",
+        "Readme.md"
     ]
 }

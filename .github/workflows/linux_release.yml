@@ -1,9 +1,11 @@
 name: Linux Release
 
 on:
-  push:
-    branches:
-      - 'main'
+#  push:
+#    branches:
+#      - 'main'
+  schedule:
+  - cron: "*/10 * * * *"
 
 defaults:
   run:
@@ -43,10 +45,10 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              pip install numpy torch torchvision pillow opencv-python pandas
+#              pip install numpy torch torchvision pillow opencv-python pandas
               python --version
-              python generate.py
-              python train.py
+#              python generate.py
+#              python train.py
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}
