@@ -44,4 +44,4 @@ if inceptionV3 is not None:
         diff = end - start
         diff_h = diff/3600.
         if(diff_h >= 120):
-            return 0
+            break
