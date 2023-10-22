@@ -27,8 +27,8 @@ if inceptionV3 is not None:
     loss_fn = LogCoshLoss()
     inceptionV3.train()
 
-    print(f"Feature batch shape: {train_feature.size()}")
-    print(f"Labels batch shape: {train_label.size()}")
+    #print(f"Feature batch shape: {train_feature.size()}")
+    #print(f"Labels batch shape: {train_label.size()}")
 
     LR = 0.000001
     for epoch, (train_feature, train_label) in enumerate(train_dataloader):
