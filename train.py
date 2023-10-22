@@ -43,5 +43,5 @@ if inceptionV3 is not None:
         end = time.time()
         diff = end - start
         diff_h = diff/3600.
-        if(diff_h >= 120):
+        if(diff_h >= 5.):
             break
