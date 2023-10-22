@@ -35,8 +35,7 @@ jobs:
       - name: Create build directory
         run:  mkdir ${{ env.SOURCE_DIR }}/continouse_dataset
 
-      - name: Cache pip
-        uses: actions/checkout@v3
+      - name: setup-python
         uses: actions/setup-python@v4
         with:
           cache: 'pip' # caching pip dependencies
