@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
   schedule:
-  - cron: "*/360 * * * *"
+  - cron: "*/30 */6 * * *"
 
 defaults:
   run:
@@ -48,7 +48,7 @@ jobs:
               python --version
               pip install numpy torch torchvision pillow opencv-python pandas
               python generate.py
-#              python train.py
+              python train.py
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}
