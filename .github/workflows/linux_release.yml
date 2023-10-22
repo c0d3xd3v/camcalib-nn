@@ -35,6 +35,14 @@ jobs:
       - name: Create build directory
         run:  mkdir ${{ env.SOURCE_DIR }}/continouse_dataset
 
+      - name: Cache pip
+        uses: actions/checkout@v3
+        uses: actions/setup-python@v4
+        with:
+          cache: 'pip' # caching pip dependencies
+        run:  |
+              pip install numpy torch torchvision pillow opencv-python pandas
+
       - name: Cache Build
         uses: actions/cache@v3
         with: 
@@ -45,8 +53,6 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              python --version
-              pip install numpy torch torchvision pillow opencv-python pandas
               python generate.py
               python train.py
 
