@@ -30,7 +30,7 @@ if inceptionV3 is not None:
     #print(f"Labels batch shape: {train_label.size()}")
 
     start = time.time()
-    LR = 0.000001
+    LR = 0.0001
     for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         optimizer = optim.Adam(inceptionV3.parameters(), lr=LR)
         predicted = inceptionV3(train_feature)
