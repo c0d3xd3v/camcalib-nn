@@ -1,5 +1,4 @@
-# export set PYTHONPATH=/home/kai/Development/densnet-pytorch/DeepCalib/dataset/:/home/kai/Development/densnet-pytorch/DeepCalib/network_training/Regression/Single_net/
-import os, glob
+import os, glob, time
 import torch.optim as optim
 
 from torchvision.models import inception_v3, Inception_V3_Weights
@@ -30,6 +29,7 @@ if inceptionV3 is not None:
     #print(f"Feature batch shape: {train_feature.size()}")
     #print(f"Labels batch shape: {train_label.size()}")
 
+    start = time.time()
     LR = 0.000001
     for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         optimizer = optim.Adam(inceptionV3.parameters(), lr=LR)
@@ -40,3 +40,8 @@ if inceptionV3 is not None:
         optimizer.step()
         print("epoch : " + str(epoch) + ", loss : " + str(loss))
         torch.save(inceptionV3, output_dir + "deepcalib1.pt")
+        end = time.time()
+        diff = end - start
+        diff_h = diff/3600.
+        if(diff_h >= 120):
+            return 0
