@@ -41,21 +41,16 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install numpy torch torchvision pillow opencv-python pandas
 
-      - name: Output Run ID
-        run: echo ${{ github.run_id }}
-
-      - name: Output Run Number
-        run: echo ${{ github.run_number }}
-
-      - name: Output Run Attempt
-        run: echo ${{ github.run_attempt }}
+      - name: compute previous run number
+          id: get-job-id
+        run: prev_run_id=$((${{ github.run_number }} - 1))
 
       - name: Cache Build
         uses: actions/cache@v3
         with: 
           path: ${{ env.SOURCE_DIR }}/continouse_dataset
           key: ubuntu-${{ github.run_number }}
-          restore-keys: ubuntu-$((${{ github.run_number }} - 1))
+          restore-keys: ubuntu-${{ steps.get-job-id.outputs.prev_run_id }}
 
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
