@@ -43,7 +43,8 @@ jobs:
 
       - name: compute previous run number
         id: get-job-id
-        run: prev_run_id=$((${{ github.run_number }} - 1))
+        run: |
+             export set prev_run_id=$((${{ github.run_number }} - 1))
 
       - name: Cache Build
         uses: actions/cache@v3
