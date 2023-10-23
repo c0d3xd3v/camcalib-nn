@@ -42,7 +42,7 @@ jobs:
       - run: pip install numpy torch torchvision pillow opencv-python pandas
 
       - name: compute previous run number
-          id: get-job-id
+        id: get-job-id
         run: prev_run_id=$((${{ github.run_number }} - 1))
 
       - name: Cache Build
