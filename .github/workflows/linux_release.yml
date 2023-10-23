@@ -1,3 +1,4 @@
+# TODO : https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
 name: Linux Release
 
 on:
@@ -49,8 +50,7 @@ jobs:
 
       - name: Determine Previous Run Number
         id: get_prev_run
-        run: echo "::set-output name=prev_run::$(($(github.run_number - 1)))"
-        if: ${{ github.run_number > 1 }}
+        run: echo "::set-output name=prev_run::$((${{ github.run_number }} - 1))"
 
       - name: Cache Build
         uses: actions/cache@v3
