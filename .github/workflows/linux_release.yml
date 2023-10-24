@@ -2,11 +2,11 @@
 name: Linux Release
 
 on:
-  push:
-    branches:
-      - 'main'
+#  push:
+#    branches:
+#      - 'main'
   schedule:
-  - cron: "*/30 */6 * * *"
+  - cron: "30 */6 * * *"
 
 defaults:
   run:
@@ -41,12 +41,6 @@ jobs:
         with:
           cache: 'pip' # caching pip dependencies
       - run: pip install numpy torch torchvision pillow opencv-python pandas
-
-      - name: compute previous run number
-        id: get-job-id
-        run: |
-             prev_run_id=$((${{ github.run_number }} - 1))
-             echo prev run id $prev_run_id
 
       - name: Determine Previous Run Number
         id: get_prev_run
