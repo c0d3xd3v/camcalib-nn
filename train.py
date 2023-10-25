@@ -21,13 +21,15 @@ else:
     inceptionV3.aux_logits = False
 
 if inceptionV3 is not None:
+
+    last_modified = os.path.getmtime(output_dir + "deepcalib1.pt")
+    formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
+    print(f'last modified : {formatted_date}')
+
     train_dataloader = loadDeepCaliData(labels_file, img_dir)
 
     loss_fn = LogCoshLoss()
     inceptionV3.train()
-
-    #print(f"Feature batch shape: {train_feature.size()}")
-    #print(f"Labels batch shape: {train_label.size()}")
 
     start = time.time()
     LR = 0.0001
