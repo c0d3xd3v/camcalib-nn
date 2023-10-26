@@ -25,6 +25,7 @@ else:
 
 if inceptionV3 is not None:
 
+    accumulation_batch_size = 4
     batch_size = int(sys.argv[1])
     train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
@@ -37,11 +38,15 @@ if inceptionV3 is not None:
         optimizer = optim.SGD(inceptionV3.parameters(), lr=LR)
         predicted = inceptionV3(train_feature)
         loss = loss_fn(predicted[0], train_label)
-        optimizer.zero_grad()
+
         loss.backward()
-        optimizer.step()
-        print("epoch : " + str(epoch) + ", loss : " + str(loss))
-        torch.save(inceptionV3, output_dir + "deepcalib1.pt")
+
+        if (epoch + 1) % accumulation_batch_size == 0:
+            optimizer.step()
+            optimizer.zero_grad()
+            torch.save(inceptionV3, output_dir + "deepcalib1.pt")
+            print("epoch : " + str(epoch) + ", loss : " + str(loss))
+
         end = time.time()
         diff = end - start
         diff_h = diff/3600.
