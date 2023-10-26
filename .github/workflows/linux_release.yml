@@ -59,7 +59,7 @@ jobs:
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
               python generate.py
-              python train.py
+              python train.py 128
 #              python lr_finder.py
 
 #      - name: Zip build

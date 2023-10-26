@@ -61,7 +61,7 @@ def batch_mean_and_sd(loader):
     return mean,std
 
 
-def loadDeepCaliDataNormalized(labels_file, img_dir):
+def loadDeepCaliDataNormalized(labels_file, img_dir, batch_size):
     train_dataloader = loadDeepCaliData(labels_file, img_dir)
 
     mean, std = batch_mean_and_sd(train_dataloader)
@@ -74,6 +74,6 @@ def loadDeepCaliDataNormalized(labels_file, img_dir):
                         torchvision.transforms.Normalize(mean = mean, std= std)]),
                         target_transform=Compose([float]))
 
-    normalized_train_dataloader = DataLoader(normalized_dataset, batch_size=32, shuffle=True)
+    normalized_train_dataloader = DataLoader(normalized_dataset, batch_size=batch_size, shuffle=True)
 
     return normalized_train_dataloader

@@ -1,4 +1,4 @@
-import os, glob, time
+import os, sys, glob, time
 import torch.optim as optim
 
 from torchvision.models import inception_v3, Inception_V3_Weights
@@ -25,7 +25,8 @@ else:
 
 if inceptionV3 is not None:
 
-    train_dataloader = loadDeepCaliData(labels_file, img_dir)
+    batch_size = int(sys.argv[1])
+    train_dataloader = loadDeepCaliDataNormalized(labels_file, img_dir, batch_size)
 
     loss_fn = LogCoshLoss()
     inceptionV3.train()
