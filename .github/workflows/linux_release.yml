@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           cache: 'pip' # caching pip dependencies
-      - run: pip install numpy torch torchvision pillow opencv-python pandas
+      - run: pip install numpy torch torchvision pillow opencv-python pandas torch-lr-finder
 
       - name: Determine Previous Run Number
         id: get_prev_run
@@ -51,15 +51,16 @@ jobs:
         with: 
           path: ${{ env.SOURCE_DIR }}/continouse_dataset
           key: ubuntu-${{ github.run_number }}
-          restore-keys: ubuntu-100
+          restore-keys: ubuntu-
 #                        ubuntu-${{ steps.get_prev_run.outputs.prev_run }}
 
 
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              python generate.py
-              python train.py
+              python lr_finder.py
+#              python generate.py
+#              python train.py
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}

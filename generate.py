@@ -37,8 +37,9 @@ if __name__ == '__main__':
 
     if os. path. exists(output_dir):
         if len(os.listdir(output_dir)) == 0:
-            generateNumImages(path_to_360_images, output_dir, 300)
+            generateNumImages(path_to_360_images, output_dir, 100)
         else:
             print("use cached data ...")
     else:
-        generateNumImages(path_to_360_images, output_dir, 300)
+        os.mkdir(output_dir)
+        generateNumImages(path_to_360_images, output_dir, 100)

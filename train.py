@@ -12,6 +12,9 @@ img_dir = output_dir
 
 inceptionV3 = None
 if os.path.isfile(output_dir + "deepcalib1.pt"):
+    last_modified = os.path.getmtime(output_dir + "deepcalib1.pt")
+    formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
+    print(f'last modified : {formatted_date}')
     inceptionV3 = torch.load(output_dir + "deepcalib1.pt")
 else:
     inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0',
@@ -21,10 +24,6 @@ else:
     inceptionV3.aux_logits = False
 
 if inceptionV3 is not None:
-
-    last_modified = os.path.getmtime(output_dir + "deepcalib1.pt")
-    formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
-    print(f'last modified : {formatted_date}')
 
     train_dataloader = loadDeepCaliData(labels_file, img_dir)
 

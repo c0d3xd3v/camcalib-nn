@@ -10,6 +10,8 @@
         "predict.py",
         "DataSetGeneration/NormalizeData.py",
         ".github/workflows/linux_release.yml",
-        "Readme.md"
+        "Readme.md",
+        "lr_finder.py",
+        ".gitignore"
     ]
 }
