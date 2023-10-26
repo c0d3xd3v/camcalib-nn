@@ -26,7 +26,7 @@ else:
 if inceptionV3 is not None:
 
     batch_size = int(sys.argv[1])
-    train_dataloader = loadDeepCaliDataNormalized(labels_file, img_dir, batch_size)
+    train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
     loss_fn = LogCoshLoss()
     inceptionV3.train()
