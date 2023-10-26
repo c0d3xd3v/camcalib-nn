@@ -32,7 +32,7 @@ if inceptionV3 is not None:
     inceptionV3.train()
 
     start = time.time()
-    LR = 0.0001
+    LR = 0.001
     for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         optimizer = optim.Adam(inceptionV3.parameters(), lr=LR)
         predicted = inceptionV3(train_feature)
