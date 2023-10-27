@@ -8,10 +8,11 @@ from CNN.DeepCalibOutputLayer import FocAndDisOut
 
 def loadInceptionV3Regression(output_dir):
     inceptionV3 = None
+
     if os.path.isfile(output_dir + "deepcalib1.pt"):
         last_modified = os.path.getmtime(output_dir + "deepcalib1.pt")
         formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
-        print(f'last modified : {formatted_date}')
+        print(f'deepcalib1.pt loaded, last modified : {formatted_date}')
         inceptionV3 = torch.load(output_dir + "deepcalib1.pt")
     else:
         inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0',
@@ -19,4 +20,11 @@ def loadInceptionV3Regression(output_dir):
                                       weights=Inception_V3_Weights.IMAGENET1K_V1)
         inceptionV3.fc = FocAndDisOut()
         inceptionV3.aux_logits = False
+
+    if os.path.isfile(output_dir + 'model_state.pth'):
+        last_modified = os.path.getmtime(output_dir + 'model_state.pth')
+        formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
+        print(f'model_state.pth loaded, last modified : {formatted_date}')
+        inceptionV3.load_state_dict(torch.load(output_dir + 'model_state.pth'))
+
     return inceptionV3
