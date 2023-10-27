@@ -1,52 +1,39 @@
-import os
-import time
-import torch
-from torch import nn
-import torch.optim as optim
-from torch_lr_finder import LRFinder
+import os, sys, glob, time
 
-from CNN.DeepCalibOutputLayer import *
-from torchvision.models import inception_v3, Inception_V3_Weights
+from CNN.DeepCalibOutputLayer import LogCoshLoss
+from CNN.LoadCNN import loadInceptionV3Regression
 from DataSetGeneration.CustomImageDataset import *
 
-output_dir = "continouse_dataset/"
-labels_file = output_dir + "labels.csv"
-img_dir = output_dir
-# Definieren Sie Ihr Modell und den Verlust (Loss)
-inceptionV3 = None
-if os.path.isfile(output_dir + "deepcalib1.pt"):
-    last_modified = os.path.getmtime(output_dir + "deepcalib1.pt")
-    formatted_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_modified))
-    print(f'last modified : {formatted_date}')
-    inceptionV3 = torch.load(output_dir + "deepcalib1.pt")
-else:
-    inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0',
-                                 'inception_v3',
-                                  weights=Inception_V3_Weights.IMAGENET1K_V1)
-    inceptionV3.fc = FocAndDisOut()
-    inceptionV3.aux_logits = False
+import torch
+import torch.optim as optim
+from torchvision.models import inception_v3, Inception_V3_Weights
+from torch_lr_finder import LRFinder
 
-criterion = LogCoshLoss()
 
-# Definieren Sie den Optimizer mit einer vorläufigen Lernrate (Startwert)
-optimizer = optim.Adam(inceptionV3.parameters(), lr=1e-7)
+def find_best_lr(model, optimizer, criterion):
+    lr_finder = LRFinder(model, optimizer, criterion)
+    lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
 
-train_loader = loadDeepCaliData(labels_file, img_dir)
+    min_loss = min(lr_finder.history['loss'])
+    idx_min_loss = lr_finder.history['loss'].index(min_loss)
+    suggested_lr = lr_finder.history['lr'][idx_min_loss]
 
-# Erstellen Sie den Lernratenfinder
-lr_finder = LRFinder(inceptionV3, optimizer, criterion)
+    print(min_loss)
+    print(f"Beste Lernrate: {suggested_lr}")
 
-# Führen Sie den Lernratenfinder durch, indem Sie die Trainingsdaten durchlaufen
-lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
+    lr_finder.reset()
+    lr_finder.plot()
 
-# Zeigen Sie die Ergebnisse des Lernratenfinders an
-lr_finder.plot()
+    return suggested_lr
 
-# Wählen Sie die optimale Lernrate auf Grundlage der Plot-Grafik
-best_lr = lr_finder.history['lr'][lr_finder.history['loss'].idxmin()]
-print(f"Optimale Lernrate: {best_lr}")
+if __name__ == "__main__":
+    output_dir = "continouse_dataset/"
+    labels_file = output_dir + "labels.csv"
+    img_dir = output_dir
 
-# Setzen Sie die optimale Lernrate für das eigentliche Training
-optimizer.param_groups[0]['lr'] = best_lr
+    inceptionV3 = loadInceptionV3Regression(output_dir)
+    criterion = LogCoshLoss()
+    optimizer = optim.SGD(inceptionV3.parameters(), lr=1e-7, momentum=0.75)
+    train_loader = loadDeepCaliData(labels_file, img_dir, 4)
 
-# Führen Sie nun das eigentliche Training mit der ausgewählten Lernrate durch
+    find_best_lr(inceptionV3, optimizer, criterion)

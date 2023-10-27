@@ -12,6 +12,7 @@
         ".github/workflows/linux_release.yml",
         "Readme.md",
         "lr_finder.py",
-        ".gitignore"
+        ".gitignore",
+        "CNN/LoadCNN.py"
     ]
 }
