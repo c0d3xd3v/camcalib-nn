@@ -10,7 +10,7 @@ from torchvision.models import inception_v3, Inception_V3_Weights
 from torch_lr_finder import LRFinder
 
 
-def find_best_lr(model, optimizer, criterion):
+def find_best_lr(model, optimizer, criterion, train_loader):
     lr_finder = LRFinder(model, optimizer, criterion)
     lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
 
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     img_dir = output_dir
 
     inceptionV3 = loadInceptionV3Regression(output_dir)
-    criterion = NCCLoss() #LogCoshLoss()
+    criterion = LogCoshLoss()
     optimizer = optim.SGD(inceptionV3.parameters(), lr=1e-7, momentum=0.75)
     train_loader = loadDeepCaliData(labels_file, img_dir, 4)
 
-    find_best_lr(inceptionV3, optimizer, criterion)
+    find_best_lr(inceptionV3, optimizer, criterion, train_loader)

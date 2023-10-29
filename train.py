@@ -23,7 +23,7 @@ else:
     print("use cuda : no")
 
 if inceptionV3 is not None:
-    LR = 6.58E-05
+    LR = 6.58E-03
     accumulation_batch_size = 4
     batch_size = int(sys.argv[1])
 

@@ -59,9 +59,8 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              python lr_finder.py
-#              python generate.py
-#              python train.py 4
+              python generate.py
+              python train.py 4
 
 #      - name: Zip build
 #        working-directory: ${{ env.SOURCE_DIR }}
