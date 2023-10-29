@@ -27,8 +27,8 @@ if inceptionV3 is not None:
     accumulation_batch_size = 4
     batch_size = int(sys.argv[1])
 
-    loss_fn = NCCLoss() #LogCoshLoss()
-    train_dataloader = loadDeepCaliDataNormalized(labels_file, img_dir, batch_size)
+    loss_fn = LogCoshLoss()
+    train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
     optimizer = optim.SGD(inceptionV3.parameters(), lr=LR, momentum=0.9)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
 

@@ -29,8 +29,8 @@ if __name__ == "__main__":
     img_dir = output_dir
 
     inceptionV3 = loadInceptionV3Regression(output_dir)
-    criterion = LogCoshLoss()
-    optimizer = optim.SGD(inceptionV3.parameters(), lr=1e-7, momentum=0.75)
-    train_loader = loadDeepCaliData(labels_file, img_dir, 4)
+    criterion = NCCLoss() #LogCoshLoss()
+    optimizer = optim.SGD(inceptionV3.parameters(), lr=1e-7, momentum=0.9)
+    train_loader = loadDeepCaliDataNormalized(labels_file, img_dir, 4)
 
     find_best_lr(inceptionV3, optimizer, criterion, train_loader)
