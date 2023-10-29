@@ -31,7 +31,7 @@ if inceptionV3 is not None:
     loss_fn = LogCoshLoss()
     train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
     optimizer = optim.SGD(inceptionV3.parameters(), lr=LR, momentum=0.9)
-    #scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
 
     inceptionV3.to(device)
 
@@ -47,17 +47,17 @@ if inceptionV3 is not None:
         loss.backward()
 
         if (epoch + 1) % accumulation_batch_size == 0:
-            LR = find_best_lr(inceptionV3, optimizer, loss_fn, train_dataloader)
-            for param_group in optimizer.param_groups:
-                param_group['lr'] = LR
+            #LR = find_best_lr(inceptionV3, optimizer, loss_fn, train_dataloader)
+            #for param_group in optimizer.param_groups:
+            #    param_group['lr'] = LR
             optimizer.step()
             optimizer.zero_grad()
-            #scheduler.step(loss)
+            scheduler.step(loss)
 
             torch.save(inceptionV3, output_dir + "deepcalib1.pt")
             torch.save(inceptionV3.state_dict(), output_dir + 'model_state.pth')
 
-            print("epoch : " + str(epoch) + ", loss : " + str(loss.item()) + ", lr : " + str(LR))
+            print("epoch : " + str(epoch) + ", loss : " + str(loss.item()))
 
         end = time.time()
         diff = end - start
