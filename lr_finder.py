@@ -18,9 +18,6 @@ def find_best_lr(model, optimizer, criterion):
     idx_min_loss = lr_finder.history['loss'].index(min_loss)
     suggested_lr = lr_finder.history['lr'][idx_min_loss]
 
-    print(min_loss)
-    print(f"Beste Lernrate: {suggested_lr}")
-
     lr_finder.reset()
     lr_finder.plot()
 

@@ -23,14 +23,14 @@ else:
     print("use cuda : no")
 
 if inceptionV3 is not None:
-    LR = 5.34E-06
+    LR = 6.58E-05
     accumulation_batch_size = 4
     batch_size = int(sys.argv[1])
 
-    loss_fn = LogCoshLoss()
-    train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
-    optimizer = optim.SGD(inceptionV3.parameters(), lr=LR, momentum=0.75)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10)
+    loss_fn = NCCLoss() #LogCoshLoss()
+    train_dataloader = loadDeepCaliDataNormalized(labels_file, img_dir, batch_size)
+    optimizer = optim.SGD(inceptionV3.parameters(), lr=LR, momentum=0.9)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
 
     inceptionV3.to(device)
 

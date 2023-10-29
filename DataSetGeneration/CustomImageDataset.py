@@ -62,7 +62,7 @@ def batch_mean_and_sd(loader):
 
 
 def loadDeepCaliDataNormalized(labels_file, img_dir, batch_size):
-    train_dataloader = loadDeepCaliData(labels_file, img_dir)
+    train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
     mean, std = batch_mean_and_sd(train_dataloader)
     print("mean and std: \n", mean, std)
