@@ -14,16 +14,16 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 6.58E-03
+LR = 5.58E+01
 accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-loss_fn = LogCoshLoss()
+loss_fn = NCCLoss()
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
 inceptionV3 = loadInceptionV3Regression()
-optimizer = optim.Adam(inceptionV3.parameters(), lr=LR)
+optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
 inceptionV3,optimizer, epochStart =  load_ckp(output_dir, inceptionV3, optimizer)
 
 if torch.cuda.is_available():
@@ -39,23 +39,20 @@ start = time.time()
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
 
     train_feature, train_label = train_feature.to(device), train_label.to(device)
-
+    optimizer.zero_grad()
     predicted = inceptionV3(train_feature)
     loss = loss_fn(predicted, train_label)
     loss.backward()
+    optimizer.step()
+    print("epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
 
     if (epoch + 1) % accumulation_batch_size == 0:
-        optimizer.step()
-        optimizer.zero_grad()
-
         checkpoint = {
             'epoch': epoch + 1 + epochStart,
             'state_dict': inceptionV3.state_dict(),
             'optimizer': optimizer.state_dict()
         }
         save_ckp(checkpoint, output_dir)
-
-        print("epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
 
     end = time.time()
     diff = end - start

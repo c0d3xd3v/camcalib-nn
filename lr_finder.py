@@ -1,7 +1,7 @@
 import os, sys, glob, time, math
 
 from CNN.DeepCalibOutputLayer import LogCoshLoss, NCCLoss
-from CNN.LoadCNN import loadInceptionV3Regression
+from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
 from DataSetGeneration.CustomImageDataset import *
 
 import numpy as np
@@ -32,7 +32,7 @@ def find_best_lr(model, optimizer, criterion, train_loader):
     best_lr = lr[lgmin_index]
 
     lr_finder.reset()
-    #lr_finder.plot()
+    lr_finder.plot()
     return best_lr
 
 if __name__ == "__main__":
@@ -40,10 +40,11 @@ if __name__ == "__main__":
     labels_file = output_dir + "labels.csv"
     img_dir = output_dir
 
-    inceptionV3 = loadInceptionV3Regression(output_dir)
-    criterion = LogCoshLoss()
-    optimizer = optim.SGD(inceptionV3.parameters(), lr=1e-7, momentum=0.9)
+    inceptionV3 = loadInceptionV3Regression()
+    criterion = NCCLoss()
+    optimizer = optim.Adam(inceptionV3.parameters(), foreach=True, amsgrad=True)
     train_loader = loadDeepCaliData(labels_file, img_dir, 4)
+    inceptionV3, optimizer, epochStart =  load_ckp(output_dir, inceptionV3, optimizer)
 
     best_lr = find_best_lr(inceptionV3, optimizer, criterion, train_loader)
     print('{:.2e}'.format(best_lr))
