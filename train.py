@@ -5,62 +5,60 @@ import torch.optim as optim
 from torchvision.models import inception_v3, Inception_V3_Weights
 
 from CNN.DeepCalibOutputLayer import LogCoshLoss, NCCLoss
-from CNN.LoadCNN import loadInceptionV3Regression
+from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
 from DataSetGeneration.CustomImageDataset import *
 
-from lr_finder import find_best_lr
+from lr_finder import find_best_lr, setLR
 
 output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-inceptionV3 = loadInceptionV3Regression(output_dir)
-
+LR = 6.58E-03
+accumulation_batch_size = 4
+batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+loss_fn = LogCoshLoss()
+train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
+
+inceptionV3 = loadInceptionV3Regression()
+optimizer = optim.Adam(inceptionV3.parameters(), lr=LR)
+inceptionV3,optimizer, epochStart =  load_ckp(output_dir, inceptionV3, optimizer)
 
 if torch.cuda.is_available():
     print("use cuda : yes")
 else:
     print("use cuda : no")
 
-if inceptionV3 is not None:
-    LR = 6.58E-03
-    accumulation_batch_size = 4
-    batch_size = int(sys.argv[1])
+inceptionV3.to(device)
+inceptionV3.train()
 
-    loss_fn = LogCoshLoss()
-    train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
-    optimizer = optim.SGD(inceptionV3.parameters(), lr=LR, momentum=0.9)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
 
-    inceptionV3.to(device)
+start = time.time()
+for epoch, (train_feature, train_label) in enumerate(train_dataloader):
 
-    inceptionV3.train()
-    start = time.time()
+    train_feature, train_label = train_feature.to(device), train_label.to(device)
 
-    for epoch, (train_feature, train_label) in enumerate(train_dataloader):
+    predicted = inceptionV3(train_feature)
+    loss = loss_fn(predicted, train_label)
+    loss.backward()
 
-        train_feature, train_label = train_feature.to(device), train_label.to(device)
+    if (epoch + 1) % accumulation_batch_size == 0:
+        optimizer.step()
+        optimizer.zero_grad()
 
-        predicted = inceptionV3(train_feature)
-        loss = loss_fn(predicted, train_label)
-        loss.backward()
+        checkpoint = {
+            'epoch': epoch + 1 + epochStart,
+            'state_dict': inceptionV3.state_dict(),
+            'optimizer': optimizer.state_dict()
+        }
+        save_ckp(checkpoint, output_dir)
 
-        if (epoch + 1) % accumulation_batch_size == 0:
-            #LR = find_best_lr(inceptionV3, optimizer, loss_fn, train_dataloader)
-            #for param_group in optimizer.param_groups:
-            #    param_group['lr'] = LR
-            optimizer.step()
-            optimizer.zero_grad()
-            scheduler.step(loss)
+        print("epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
 
-            torch.save(inceptionV3, output_dir + "deepcalib1.pt")
-            torch.save(inceptionV3.state_dict(), output_dir + 'model_state.pth')
-
-            print("epoch : " + str(epoch) + ", loss : " + str(loss.item()))
-
-        end = time.time()
-        diff = end - start
-        diff_h = diff/3600.
-        if(diff_h >= 5.):
-            break
+    end = time.time()
+    diff = end - start
+    diff_h = diff/3600.
+    if(diff_h >= 5.):
+        break

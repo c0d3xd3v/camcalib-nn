@@ -14,6 +14,11 @@ from torch_lr_finder import LRFinder
 
 import json
 
+def setLR(optimizer, new_lr):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = new_lr
+    return optimizer
+
 def find_best_lr(model, optimizer, criterion, train_loader):
     lr_finder = LRFinder(model, optimizer, criterion)
     lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
