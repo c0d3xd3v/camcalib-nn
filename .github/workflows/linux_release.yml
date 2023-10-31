@@ -16,7 +16,7 @@ defaults:
 env:
   SOURCE_DIR:   ${{ github.workspace }}
   QT_VERSION:   5.15.2
-#  ARTIFACT:     qt-planets-linux-build.zip
+  ARTIFACT:     camcalib_artifacts.zip
 #  INSTALL_DIRECTORY: ${{ github.workspace }}/install
 
 jobs:
@@ -55,23 +55,22 @@ jobs:
           restore-keys: ubuntu-134
 #                        ubuntu-${{ steps.get_prev_run.outputs.prev_run }}
 
-
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
               python generate.py
-              python train.py 4
+              python train.py 16
 
-#      - name: Zip build
-#        working-directory: ${{ env.SOURCE_DIR }}
-#        run:  |
-#              7z a ${{ env.ARTIFACT }} ${{ env.INSTALL_DIRECTORY }}/* -r
+      - name: Zip build
+        working-directory: ${{ env.SOURCE_DIR }}
+        run:  |
+              7z a ${{ env.ARTIFACT }} ${{ env.SOURCE_DIR }}/continouse_dataset/loss_history.csv ${{ env.SOURCE_DIR }}/continouse_dataset/checkpoint.pt
 
-#      - name: Save build artifact
-#        uses: actions/upload-artifact@master
-#        with:
-#          name: ${{ env.ARTIFACT }}
-#          path: ${{ env.SOURCE_DIR }}/${{ env.ARTIFACT }} 
+      - name: Save build artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: ${{ env.SOURCE_DIR }}/${{ env.ARTIFACT }}
 
 #      - name: AppImage
 #        working-directory: ${{ env.SOURCE_DIR }}/build
