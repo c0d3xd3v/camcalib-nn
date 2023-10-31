@@ -16,12 +16,12 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 0.0001
+LR = 0.5
 accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-loss_fn = NCCLoss()
+loss_fn = LogCoshLoss() #NCCLoss()
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
 inceptionV3 = loadInceptionV3Regression()

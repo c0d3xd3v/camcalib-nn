@@ -32,7 +32,7 @@ def diskradius(xi, f):
     return np.sqrt(z) if(z > 0.) else -1.
 
 
-def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_path):
+def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_path, numImg):
     
         H=299
         W=299
@@ -43,7 +43,7 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
         grid_x, grid_y = np.meshgrid(range(W), range(H))
         
         csv_file = open(output_path + 'labels.csv', 'a', newline='')   
-        for i in range(200):
+        for i in range(numImg):
             while True:
                 x_ref = 1
                 y_ref = 1
@@ -152,7 +152,7 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
         csv_file.close()
 
 
-def generateSingleImageProjections(in_360_image_path, output_path):
+def generateSingleImageProjections(in_360_image_path, output_path, numImg):
         file_name = in_360_image_path.split('/')[-1]
         file_path = in_360_image_path.replace(file_name, '')
         print(file_path)
@@ -162,7 +162,7 @@ def generateSingleImageProjections(in_360_image_path, output_path):
         ImPano_W = np.shape(image360)[1]
         ImPano_H = np.shape(image360)[0]
 
-        generateImageProjections(image360, ImPano_W, ImPano_H, in_360_image_path, output_path)
+        generateImageProjections(image360, ImPano_W, ImPano_H, in_360_image_path, output_path, numImg)
 
 
 if __name__ == "__main__":

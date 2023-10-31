@@ -27,7 +27,7 @@ def generateNumImages(path_to_360_images, output_dir, num):
     list_360_image_paths = glob.glob(path_to_360_images)
     for i in range(num):
         impath = list_360_image_paths[i]
-        DeepCalibDataset.generateSingleImageProjections(impath, output_dir)
+        DeepCalibDataset.generateSingleImageProjections(impath, output_dir, num)
 
     print("elapsed time ", time.process_time() - starttime)
 

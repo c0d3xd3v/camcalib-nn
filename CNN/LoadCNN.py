@@ -9,8 +9,9 @@ from CNN.DeepCalibOutputLayer import FocAndDisOut
 def loadInceptionV3Regression():
 
     inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0',
-                                 'inception_v3',
-                                  weights=Inception_V3_Weights.IMAGENET1K_V1)
+                                 'inception_v3'
+#                                  ,weights=Inception_V3_Weights.IMAGENET1K_V1
+                                  )
     inceptionV3.fc = FocAndDisOut()
     inceptionV3.aux_logits = False
 
