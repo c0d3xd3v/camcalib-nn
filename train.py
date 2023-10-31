@@ -1,5 +1,7 @@
 import os, sys, glob, time
 
+import json
+
 import torch
 import torch.optim as optim
 from torchvision.models import inception_v3, Inception_V3_Weights
@@ -14,7 +16,7 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 5.58E+01
+LR = 0.0001
 accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -34,7 +36,7 @@ else:
 inceptionV3.to(device)
 inceptionV3.train()
 
-
+loss_series = []
 start = time.time()
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
 
@@ -45,7 +47,7 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
     loss.backward()
     optimizer.step()
     print("epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
-
+    loss_series.append((epochStart + epoch, loss.item()))
     if (epoch + 1) % accumulation_batch_size == 0:
         checkpoint = {
             'epoch': epoch + 1 + epochStart,
@@ -53,6 +55,12 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
             'optimizer': optimizer.state_dict()
         }
         save_ckp(checkpoint, output_dir)
+
+        with open(output_dir + 'loss_history.csv', 'a') as file:
+            ep = epochStart + epoch
+            l = loss.item()
+            file.write(f'{ep},{l}\n')
+            file.close()
 
     end = time.time()
     diff = end - start

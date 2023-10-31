@@ -11,7 +11,7 @@ from torchvision.transforms import ToTensor, Compose, ToPILImage
 import CustomImageDataset
 
 
-output_dir = "/home/kai/Development/densnet-pytorch/continouse_dataset/"
+output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
