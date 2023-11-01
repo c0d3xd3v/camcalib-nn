@@ -2,9 +2,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Step 1: Import the necessary libraries
 
-# Step 2: Read the data from the CSV file
 x_data = []
 y_data = []
 
@@ -21,12 +19,11 @@ z = np.polyfit(x_data, y_data, 1)
 p = np.poly1d(z)
 x_intersection = -z[1] / z[0]
 print("x_intersection : " + str(x_intersection))
-plt.plot(x_data, y_data, label='Loss')  # Create a simple line plot
+plt.plot(x_data, y_data, label='Loss')
 plt.plot(x_data, p(x_data), label='Trendline')
-#lt.title('CSV Data Plot')  # Set the title of the plot
-plt.xlabel('epoch')  # Label for the x-axis
-plt.ylabel('loss')  # Label for the y-axis
-plt.legend()  # Display the legend (if multiple datasets)
 
-# Step 5: Display the plot
-plt.show()
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.legend()
+
+plt.savefig(output_dir + 'loss_graph.png')

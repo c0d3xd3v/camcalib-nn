@@ -9,7 +9,7 @@ from CNN.DeepCalibOutputLayer import FocAndDisOut
 def loadInceptionV3Regression():
 
     inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0',
-                                 'inception_v3'
+                                 'inception_v3', init_weights=False
 #                                  ,weights=Inception_V3_Weights.IMAGENET1K_V1
                                   )
     inceptionV3.fc = FocAndDisOut()
@@ -42,9 +42,11 @@ def save_ckp(state, checkpoint_dir):
 
 def load_ckp(checkpoint_fpath, model, optimizer):
     epoch = 0
+    last_min_loss = float('inf')
     if os.path.isfile(checkpoint_fpath + "checkpoint.pt"):
         checkpoint = torch.load(checkpoint_fpath + 'checkpoint.pt')
         epoch = checkpoint['epoch']
         model.load_state_dict(checkpoint['state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer'])
-    return model, optimizer, epoch
+        last_min_loss = checkpoint['last_min_loss']
+    return model, optimizer, epoch, last_min_loss

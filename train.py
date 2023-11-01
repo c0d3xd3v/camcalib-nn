@@ -16,7 +16,7 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 0.5
+LR = 0.0125
 accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -26,7 +26,7 @@ train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
 inceptionV3 = loadInceptionV3Regression()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
-inceptionV3,optimizer, epochStart =  load_ckp(output_dir, inceptionV3, optimizer)
+inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir, inceptionV3, optimizer)
 
 if torch.cuda.is_available():
     print("use cuda : yes")
@@ -38,6 +38,7 @@ inceptionV3.train()
 
 loss_series = []
 start = time.time()
+
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
 
     train_feature, train_label = train_feature.to(device), train_label.to(device)
@@ -46,21 +47,24 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
     loss = loss_fn(predicted, train_label)
     loss.backward()
     optimizer.step()
-    print("epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
     loss_series.append((epochStart + epoch, loss.item()))
-    if (epoch + 1) % accumulation_batch_size == 0:
+
+    if loss.item() < last_min_loss:
+        last_min_loss = loss.item()
         checkpoint = {
             'epoch': epoch + 1 + epochStart,
             'state_dict': inceptionV3.state_dict(),
-            'optimizer': optimizer.state_dict()
+            'optimizer': optimizer.state_dict(),
+            'last_min_loss': last_min_loss
         }
         save_ckp(checkpoint, output_dir)
+        print("saved epoch : " + str(epochStart + epoch) + ", loss : " + str(loss.item()))
 
-        with open(output_dir + 'loss_history.csv', 'a') as file:
-            ep = epochStart + epoch
-            l = loss.item()
-            file.write(f'{ep},{l}\n')
-            file.close()
+    with open(output_dir + 'loss_history.csv', 'a') as file:
+        ep = epochStart + epoch
+        l = loss.item()
+        file.write(f'{ep},{l}\n')
+        file.close()
 
     end = time.time()
     diff = end - start
