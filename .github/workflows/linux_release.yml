@@ -60,6 +60,7 @@ jobs:
         run:  |
               python generate.py
               python train.py 16
+              python plot_data.py
 
       - name: Zip build
         working-directory: ${{ env.SOURCE_DIR }}
