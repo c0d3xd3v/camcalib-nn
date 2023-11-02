@@ -24,7 +24,7 @@ dataset = CustomImageDataset(labels_file, img_dir,
 
 inceptionV3 = loadInceptionV3Regression()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
-inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
+inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'checkpoint.pt', inceptionV3, optimizer)
 inceptionV3.eval()
 
 train_dataloader = DataLoader(dataset, batch_size=2, shuffle=False)

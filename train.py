@@ -1,10 +1,8 @@
 import os, sys, glob, time
 
-import json
-
 import torch
 import torch.optim as optim
-from torchvision.models import inception_v3, Inception_V3_Weights
+from torchvision.models import inception_v3
 
 from CNN.DeepCalibOutputLayer import LogCoshLoss, NCCLoss
 from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
@@ -18,10 +16,9 @@ img_dir = output_dir
 
 LR = 0.00005
 l2_lambda = 0.01
-accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 loss_fn = LogCoshLoss()
 #loss_fn = NCCLoss()
 #loss_fn = torch.nn.MSELoss()
@@ -57,12 +54,6 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
     optimizer.step()
     #scheduler.step(loss)
     current_lr = optimizer.param_groups[0]['lr']
-
-    #if current_lr < 1.0e-4:
-    #    for param_group in optimizer.param_groups:
-    #        param_group['lr'] = 10000.0
-
-    #print(current_lr)
 
     loss_series.append((epochStart + epoch, loss.item()))
     if loss.item() < last_min_loss:

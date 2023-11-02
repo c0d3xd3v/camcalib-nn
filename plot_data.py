@@ -33,7 +33,9 @@ def animate(i):
         ax1.plot(xar,yar)
         ax2.plot(xar,yar)
         ax2.autoscale()
+        ax1.autoscale()
         ax2.set_xlim(len(xar) - 200, len(xar) + 10)
+        ax1.set_ylim(0.0, ax1.get_ylim()[1])
 
 
 if __name__ == "__main__":
