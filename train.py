@@ -16,22 +16,30 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 0.125
+LR = 0.00005
+l2_lambda = 0.01
 accumulation_batch_size = 4
 batch_size = int(sys.argv[1])
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-loss_fn = LogCoshLoss() #NCCLoss()
+loss_fn = LogCoshLoss()
+#loss_fn = NCCLoss()
+#loss_fn = torch.nn.MSELoss()
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
 inceptionV3 = loadInceptionV3Regression()
-optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
+optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, weight_decay=l2_lambda, amsgrad=True)
 inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
+
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, patience=10)
 
 if torch.cuda.is_available():
     print("use cuda : yes")
 else:
     print("use cuda : no")
+
+for param_group in optimizer.param_groups:
+    param_group['lr'] = 1.0e-5
 
 inceptionV3.to(device)
 inceptionV3.train()
@@ -47,8 +55,16 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
     loss = loss_fn(predicted, train_label)
     loss.backward()
     optimizer.step()
-    loss_series.append((epochStart + epoch, loss.item()))
+    #scheduler.step(loss)
+    current_lr = optimizer.param_groups[0]['lr']
 
+    #if current_lr < 1.0e-4:
+    #    for param_group in optimizer.param_groups:
+    #        param_group['lr'] = 10000.0
+
+    #print(current_lr)
+
+    loss_series.append((epochStart + epoch, loss.item()))
     if loss.item() < last_min_loss:
         last_min_loss = loss.item()
         checkpoint = {
