@@ -60,12 +60,12 @@ jobs:
         run:  |
               python generate.py
               python train.py 32
-              python plot_data.py
+#              python plot_data.py
 
       - name: Zip build
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              7z a ${{ env.ARTIFACT }} ${{ env.SOURCE_DIR }}/continouse_dataset/loss_history.csv ${{ env.SOURCE_DIR }}/continouse_dataset/checkpoint.pt ${{ env.SOURCE_DIR }}/continouse_dataset/loss_graph.png
+              7z a ${{ env.ARTIFACT }} ${{ env.SOURCE_DIR }}/continouse_dataset/loss_history.csv ${{ env.SOURCE_DIR }}/continouse_dataset/checkpoint.pt
 
       - name: Save build artifact
         uses: actions/upload-artifact@master
