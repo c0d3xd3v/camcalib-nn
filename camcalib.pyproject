@@ -11,9 +11,10 @@
         "DataSetGeneration/NormalizeData.py",
         ".github/workflows/linux_release.yml",
         "Readme.md",
-        "lr_finder.py",
+        "tools/lr_finder.py",
         ".gitignore",
         "CNN/LoadCNN.py",
-        "plot_data.py"
+        "tools/plot_data.py",
+        "CNN/LossFunctions.py"
     ]
 }

@@ -28,14 +28,24 @@ def animate(i):
         for row in reader:
             xar.append(float(row[0]))
             yar.append(float(row[1]))
-        ax1.clear()
-        ax2.clear()
-        ax1.plot(xar,yar)
-        ax2.plot(xar,yar)
-        ax2.autoscale()
-        ax1.autoscale()
-        ax2.set_xlim(len(xar) - 200, len(xar) + 10)
-        ax1.set_ylim(0.0, ax1.get_ylim()[1])
+
+    with open(output_dir + 'checkpoint_history.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        xckp = []
+        yckp = []
+        for row in reader:
+            xckp.append(float(row[0]))
+            yckp.append(float(row[1]))
+
+    ax1.clear()
+    ax2.clear()
+    ax1.scatter(xckp, yckp, c=[[1., 0., 0., 1.]])
+    ax1.plot(xar,yar)
+    ax2.plot(xar,yar)
+    ax2.autoscale()
+    ax1.autoscale()
+    ax2.set_xlim(len(xar) - 200, len(xar) + 10)
+    ax1.set_ylim(0.0, ax1.get_ylim()[1])
 
 
 if __name__ == "__main__":
