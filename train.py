@@ -18,6 +18,8 @@ LR = 0.00005
 l2_lambda = 0.01
 batch_size = int(sys.argv[1])
 
+torch.set_num_threads(4)
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 loss_fn = LogCoshLoss()
 #loss_fn = NCCLoss()

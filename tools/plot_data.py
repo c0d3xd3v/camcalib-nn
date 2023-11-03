@@ -46,6 +46,8 @@ def animate(i):
     ax1.autoscale()
     ax2.set_xlim(len(xar) - 200, len(xar) + 10)
     ax1.set_ylim(0.0, ax1.get_ylim()[1])
+    ax1.grid(linestyle='-.', linewidth=0.5)
+    ax2.grid(linestyle='-.', linewidth=0.5)
 
 
 if __name__ == "__main__":
