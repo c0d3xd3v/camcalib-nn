@@ -14,10 +14,10 @@ def display_image(images):
 
 # Opening the image (R prefixed to string
 # in order to deal with '\' in paths)
-image = Image.open(r"/home/kai/Development/github/camcalib-nn/continouse_dataset/pano_0bd476aea59848b964b8506607a8c235_f_338_d_0.32846146695066664.jpg")
+image = Image.open(r"val_continouse_dataset/logo_make_11_06_2023_388_f_259_d_0.37045902112616813.jpg")
 
 
-transform=Compose([ToEdgeImg(), ToTensor()])
+transform=Compose([ToTensor()])
 img = transform(image)
 display_image(img)
 

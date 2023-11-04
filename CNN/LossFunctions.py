@@ -10,7 +10,6 @@ def _log_cosh(x: torch.Tensor) -> torch.Tensor:
 def log_cosh_loss(y_pred: torch.Tensor, y_true: torch.Tensor) -> torch.Tensor:
     return torch.mean(_log_cosh(y_pred - y_true))
 
-
 class LogCoshLoss(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -26,12 +25,8 @@ class NCCLoss(nn.Module):
     def forward(self, X, Y):
         mean1 = torch.mean(X)
         mean2 = torch.mean(Y)
-
         cross_corr = torch.sum((X - mean1) * (Y - mean2))
-
         std1 = torch.sqrt(torch.sum((X - mean1) ** 2))
         std2 = torch.sqrt(torch.sum((Y - mean2) ** 2))
-
         ncc_loss = 1 - (cross_corr / (std1 * std2))
-
         return ncc_loss

@@ -1,4 +1,4 @@
-import os, time, glob
+import os, sys, time, glob
 from os import path
 
 import DataSetGeneration.continuous_dataset_generation as DeepCalibDataset
@@ -24,13 +24,13 @@ def generate(path_to_360_images, output_dir, num):
 # ##############################################################################
 
 
-def generateNumImages(path_to_360_images, output_dir, num):
+def generateNumImages(path_to_360_images, output_dir, num, samples):
     starttime = time.process_time()
 
     list_360_image_paths = glob.glob(path_to_360_images)
     for i in range(num):
         impath = list_360_image_paths[i]
-        DeepCalibDataset.generateSingleImageProjections(impath, output_dir, num)
+        DeepCalibDataset.generateSingleImageProjections(impath, output_dir, samples)
 
     print("elapsed time ", time.process_time() - starttime)
 # ##############################################################################
@@ -40,11 +40,29 @@ if __name__ == '__main__':
     path_to_360_images = 'data/*.jpg'
     output_dir = "continouse_dataset/"
 
+    num_samples_peer_image = int(sys.argv[1])
+    num_images = int(sys.argv[2])
+
     if os. path. exists(output_dir):
         if len(os.listdir(output_dir)) == 0:
-            generate(path_to_360_images, output_dir, 200)
+            if num_images == -1:
+                generate(path_to_360_images, output_dir,
+                         num_samples_peer_image)
+            else:
+                generateNumImages(path_to_360_images,
+                                  output_dir,
+                                  num_images,
+                                  num_samples_peer_image)
         else:
             print("use cached data ...")
     else:
         os.mkdir(output_dir)
-        generate(path_to_360_images, output_dir, 200)
+        if num_images == -1:
+            generate(path_to_360_images,
+                     output_dir,
+                     num_samples_peer_image)
+        else:
+            generateNumImages(path_to_360_images,
+                              output_dir,
+                              num_images,
+                              num_samples_peer_image)

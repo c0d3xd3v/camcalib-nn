@@ -5,6 +5,10 @@
 
 [crontab.guru][2].
 
+[cross_correlation_coefficient][3].
+
 [1]: https://www.binarystudy.com/2022/04/how-to-normalize-image-dataset-inpytorch.html
 
 [2]: https://crontab.guru/#*/30_*/6_*_*_*
+
+[3]: https://xcdskd.readthedocs.io/en/latest/cross_correlation/cross_correlation_coefficient.html

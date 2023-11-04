@@ -26,43 +26,38 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #loss_fn = LogCoshLoss()
 loss_fn = NCCLoss()
 #loss_fn = torch.nn.MSELoss()
-train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
-
-inceptionV3 = loadInceptionV3Regression()
-optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, weight_decay=l2_lambda, amsgrad=True)
-inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
-
-scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, patience=10)
 
 if torch.cuda.is_available():
     print("use cuda : yes")
 else:
     print("use cuda : no")
 
-for param_group in optimizer.param_groups:
-    param_group['lr'] = 1.0e-5
+train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
+inceptionV3 = loadInceptionV3Regression()
 inceptionV3.to(device)
 inceptionV3.train()
 
-loss_series = []
-start = time.time()
+optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, weight_decay=l2_lambda, amsgrad=True)
+inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
 
 print("epochs : " + str(len(train_dataloader)))
 
+start = time.time()
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
-
+    # this steep is needed if a cuda device is available
     train_feature, train_label = train_feature.to(device), train_label.to(device)
+    # gradient accumuation effectivly effects the batch size.
     if (epochStart + epoch) % batch_accum == 0:
         optimizer.zero_grad()
+    # for  training, pytorch needs same batch size for every batch.
+    if train_feature.shape[0] != batch_size:
+        break
     predicted = inceptionV3(train_feature)
     loss = loss_fn(predicted, train_label)
     loss.backward()
     optimizer.step()
-    #scheduler.step(loss)
-    current_lr = optimizer.param_groups[0]['lr']
 
-    loss_series.append((epochStart + epoch, loss.item()))
     if loss.item() < last_min_loss:
         last_min_loss = loss.item()
         checkpoint = {
@@ -91,6 +86,7 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         ep = epochStart + epoch
         l = loss.item()
         file.write(f'{ep},{l}\n')
+        print(f'{ep},{l}')
         file.close()
 
     end = time.time()

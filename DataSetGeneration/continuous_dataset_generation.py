@@ -163,21 +163,3 @@ def generateSingleImageProjections(in_360_image_path, output_path, numImg):
         ImPano_H = np.shape(image360)[0]
 
         generateImageProjections(image360, ImPano_W, ImPano_H, in_360_image_path, output_path, numImg)
-
-
-if __name__ == "__main__":
-    def generateImagesProjections(list_360_image_paths, path_to_360_images):
-            #length of your filename list
-        for image360_path in list_360_image_paths:
-            image360 = cv2.imread(image360_path)
-            ImPano_W = np.shape(image360)[1]
-            ImPano_H = np.shape(image360)[0]
-            generateImageProjections(image360, ImPano_W, ImPano_H, image360_path)
-            
-    #----------------constants--------------
-    path_to_360_images = 'all_images_new/train/RGB/*.jpg'
-    list_360_image_paths = glob.glob(path_to_360_images)
-
-    starttime = time.process_time()
-    generateImagesProjections(list_360_image_paths, path_to_360_images)
-    print("elapsed time ", time.process_time() - starttime)

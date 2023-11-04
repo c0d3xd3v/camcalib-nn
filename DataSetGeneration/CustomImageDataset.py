@@ -12,7 +12,7 @@ from PIL import Image, ImageFilter, ImageEnhance
 class ToEdgeImg(object):
     def __call__(self, input):
         image = input.convert("L")
-        image = ImageEnhance.Contrast(image).enhance(2.5)
+        image = ImageEnhance.Contrast(image).enhance(30.5)
         # image = image.filter(ImageFilter.FIND_EDGES)
         # Calculating Edges using the passed laplacian Kernel
         image = image.filter(ImageFilter.Kernel((3, 3), (-1, -1, -1,
@@ -51,7 +51,7 @@ class CustomImageDataset(Dataset):
 
 def loadDeepCaliData(labels_file, img_dir, batch_size):
     dataset =  CustomImageDataset(labels_file, img_dir, 
-                    transform=Compose([ToPILImage(), ToEdgeImg(), ToTensor()]),
+                    transform=Compose([ToPILImage(), ToTensor()]),
                     target_transform=Compose([float]))
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return train_dataloader

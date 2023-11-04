@@ -17,9 +17,6 @@ def readCSV(path):
             y_data.append(float(row[1]))
     return x_data, y_data
 
-
-#plt.savefig(output_dir + 'loss_graph.png')
-
 def animate(i):
     with open(file_path, 'r') as csvfile:
         reader = csv.reader(csvfile)
@@ -45,13 +42,11 @@ def animate(i):
     ax2.autoscale()
     ax1.autoscale()
     ax2.set_xlim(len(xar) - 200, len(xar) + 10)
-    ax1.set_xlim(0, 44600)
     ax1.set_ylim(0.0, ax1.get_ylim()[1])
     ax1.grid(linestyle='-.', linewidth=0.5)
     ax2.grid(linestyle='-.', linewidth=0.5)
 
 
 if __name__ == "__main__":
-
-    ani = animation.FuncAnimation(fig, animate, interval=1, cache_frame_data=False)
+    ani = animation.FuncAnimation(fig, animate, interval=10, cache_frame_data=False)
     plt.show()
