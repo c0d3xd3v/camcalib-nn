@@ -16,7 +16,6 @@ def display_image(images):
   plt.imshow(img_plt[0])
   plt.show()
 
-
 if __name__ == "__main__":
     output_dir = "/home/kai/Development/densnet-pytorch/continouse_dataset/"
     labels_file = output_dir + "labels.csv"

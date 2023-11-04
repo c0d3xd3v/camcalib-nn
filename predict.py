@@ -12,6 +12,7 @@ import torch.optim as optim
 from DataSetGeneration.CustomImageDataset import *
 from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
 
+
 output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
@@ -19,7 +20,7 @@ img_dir = output_dir
 
 LR = 0.001
 dataset = CustomImageDataset(labels_file, img_dir,
-                            transform=Compose([ToPILImage(), ToTensor()]), 
+                            transform=Compose([ToPILImage(), ToEdgeImg(), ToTensor()]),
                             target_transform=Compose([float]))
 
 inceptionV3 = loadInceptionV3Regression()

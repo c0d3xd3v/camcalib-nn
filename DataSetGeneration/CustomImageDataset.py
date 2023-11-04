@@ -6,6 +6,23 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision.io import read_image
 from torchvision.transforms import ToTensor, Compose, ToPILImage
 
+from PIL import Image, ImageFilter, ImageEnhance
+
+
+class ToEdgeImg(object):
+    def __call__(self, input):
+        image = input.convert("L")
+        image = ImageEnhance.Contrast(image).enhance(2.5)
+        # image = image.filter(ImageFilter.FIND_EDGES)
+        # Calculating Edges using the passed laplacian Kernel
+        image = image.filter(ImageFilter.Kernel((3, 3), (-1, -1, -1,
+                                                         -1, 8, -1,
+                                                         -1, -1, -1),
+                                                          1, 0))
+        threshold = 254
+        image = image.point( lambda p: 255 if p > threshold else 0 )
+        image = image.convert("RGB")
+        return image
 
 class CustomImageDataset(Dataset):
     def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
@@ -34,7 +51,7 @@ class CustomImageDataset(Dataset):
 
 def loadDeepCaliData(labels_file, img_dir, batch_size):
     dataset =  CustomImageDataset(labels_file, img_dir, 
-                    transform=Compose([ToPILImage(), ToTensor()]), 
+                    transform=Compose([ToPILImage(), ToEdgeImg(), ToTensor()]),
                     target_transform=Compose([float]))
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return train_dataloader

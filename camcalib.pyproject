@@ -15,6 +15,7 @@
         ".gitignore",
         "CNN/LoadCNN.py",
         "tools/plot_data.py",
-        "CNN/LossFunctions.py"
+        "CNN/LossFunctions.py",
+        "tools/test-edge.py"
     ]
 }

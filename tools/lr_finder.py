@@ -1,6 +1,6 @@
 import os, sys, glob, time, math
 
-from CNN.DeepCalibOutputLayer import LogCoshLoss, NCCLoss
+from CNN.LossFunctions import LogCoshLoss, NCCLoss
 from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
 from DataSetGeneration.CustomImageDataset import *
 
@@ -41,9 +41,9 @@ if __name__ == "__main__":
     img_dir = output_dir
 
     inceptionV3 = loadInceptionV3Regression()
-    criterion = NCCLoss()
+    criterion = LogCoshLoss()
     optimizer = optim.Adam(inceptionV3.parameters(), foreach=True, amsgrad=True)
-    train_loader = loadDeepCaliData(labels_file, img_dir, 4)
+    train_loader = loadDeepCaliData(labels_file, img_dir, 2)
     inceptionV3, optimizer, epochStart =  load_ckp(output_dir, inceptionV3, optimizer)
 
     best_lr = find_best_lr(inceptionV3, optimizer, criterion, train_loader)

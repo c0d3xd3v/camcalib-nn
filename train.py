@@ -14,9 +14,10 @@ output_dir = "continouse_dataset/"
 labels_file = output_dir + "labels.csv"
 img_dir = output_dir
 
-LR = 0.00005
-l2_lambda = 0.01
 batch_size = int(sys.argv[1])
+batch_accum = int(sys.argv[2])
+LR = float(sys.argv[3])
+l2_lambda = float(sys.argv[4])
 
 torch.set_num_threads(4)
 
@@ -51,7 +52,8 @@ print("epochs : " + str(len(train_dataloader)))
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
 
     train_feature, train_label = train_feature.to(device), train_label.to(device)
-    optimizer.zero_grad()
+    if (epochStart + epoch) % batch_accum == 0:
+        optimizer.zero_grad()
     predicted = inceptionV3(train_feature)
     loss = loss_fn(predicted, train_label)
     loss.backward()
@@ -82,7 +84,9 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         'optimizer': optimizer.state_dict(),
         'last_min_loss': last_min_loss
     }
-    save_ckp(checkpoint, output_dir + 'current_state.pt')
+
+    if (epochStart + epoch) % batch_accum == 0:
+        save_ckp(checkpoint, output_dir + 'current_state.pt')
 
     with open(output_dir + 'loss_history.csv', 'a') as file:
         ep = epochStart + epoch
@@ -90,8 +94,8 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         file.write(f'{ep},{l}\n')
         file.close()
 
-    end = time.time()
-    diff = end - start
-    diff_h = diff/3600.
-    if(diff_h >= 5.):
-        break
+#    end = time.time()
+#    diff = end - start
+#    diff_h = diff/3600.
+#    if(diff_h >= 5.):
+#        break

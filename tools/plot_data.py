@@ -39,7 +39,7 @@ def animate(i):
 
     ax1.clear()
     ax2.clear()
-    ax1.scatter(xckp, yckp, c=[[1., 0., 0., 1.]])
+    ax1.plot(xckp, yckp)
     ax1.plot(xar,yar)
     ax2.plot(xar,yar)
     ax2.autoscale()
