@@ -18,12 +18,13 @@ batch_size = int(sys.argv[1])
 batch_accum = int(sys.argv[2])
 LR = float(sys.argv[3])
 l2_lambda = float(sys.argv[4])
+time_restrict=int(sys.argv[5])
 
 torch.set_num_threads(4)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-loss_fn = LogCoshLoss()
-#loss_fn = NCCLoss()
+#loss_fn = LogCoshLoss()
+loss_fn = NCCLoss()
 #loss_fn = torch.nn.MSELoss()
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 
@@ -84,9 +85,7 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         'optimizer': optimizer.state_dict(),
         'last_min_loss': last_min_loss
     }
-
-    if (epochStart + epoch) % batch_accum == 0:
-        save_ckp(checkpoint, output_dir + 'current_state.pt')
+    save_ckp(checkpoint, output_dir + 'current_state.pt')
 
     with open(output_dir + 'loss_history.csv', 'a') as file:
         ep = epochStart + epoch
@@ -94,8 +93,8 @@ for epoch, (train_feature, train_label) in enumerate(train_dataloader):
         file.write(f'{ep},{l}\n')
         file.close()
 
-#    end = time.time()
-#    diff = end - start
-#    diff_h = diff/3600.
-#    if(diff_h >= 5.):
-#        break
+    end = time.time()
+    diff = end - start
+    diff_h = diff/3600.
+    if(diff_h >= 5. and time_restrict==1):
+        break
