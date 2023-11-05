@@ -18,6 +18,7 @@
         "CNN/LossFunctions.py",
         "tools/test-edge.py",
         "tools/plot_f_d_distribution.py",
-        "DataSetGeneration/discrete_dataset_generation.py"
+        "DataSetGeneration/discrete_dataset_generation.py",
+        "tools/GridGenerator.py"
     ]
 }

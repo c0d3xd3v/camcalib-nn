@@ -22,6 +22,7 @@ def save_ckp(state, checkpoint_dir):
 def load_ckp(checkpoint_fpath, model, optimizer):
     iteration = 0
     last_min_loss = float('inf')
+    epoch = 0
     if os.path.isfile(checkpoint_fpath):
         checkpoint = torch.load(checkpoint_fpath)
         iteration = checkpoint['iteration']
