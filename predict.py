@@ -26,18 +26,16 @@ dataset = CustomImageDataset(labels_file, img_dir,
 
 inceptionV3 = loadInceptionV3Regression()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
-inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
+inceptionV3,optimizer, epochStart, last_min_loss, _ =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
 inceptionV3.eval()
 
 train_dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 sum = 0
 for epoch, (train_feature, train_label) in enumerate(train_dataloader):
     predicted = inceptionV3(train_feature)
-    print("train_label : ")
+    print("-------------------------")
     print(train_label)
-    print("predicted : ")
     print(predicted)
-    print(predicted - train_label)
     sum = sum + predicted - train_label
-    print("---------------------------------------")
+
 print(sum/len(train_dataloader))

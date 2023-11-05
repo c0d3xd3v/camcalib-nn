@@ -16,6 +16,8 @@
         "CNN/LoadCNN.py",
         "tools/plot_data.py",
         "CNN/LossFunctions.py",
-        "tools/test-edge.py"
+        "tools/test-edge.py",
+        "tools/plot_f_d_distribution.py",
+        "DataSetGeneration/discrete_dataset_generation.py"
     ]
 }

@@ -8,8 +8,9 @@ def clearOutputFolder(output_dir):
     out_360_image_paths = glob.glob(output_dir+"/*.*")
     for imname in out_360_image_paths:
         os.remove(imname)
-        print(imname)
-    os.makedirs(output_dir, exist_ok = True)
+        print("delete " + imname)
+    print("delete " + output_dir)
+    os.rmdir(output_dir)
 # ##############################################################################
 
 
@@ -40,7 +41,11 @@ if __name__ == '__main__':
     num_samples_peer_image = int(sys.argv[1])
     num_images = int(sys.argv[2])
     path_to_360_images = sys.argv[3] + '*.jpg'
-    output_dir = sys.argv[4] # "continouse_dataset/"
+    output_dir = sys.argv[4]
+
+    if len(sys.argv) > 5:
+        if int(sys.argv[5]) == 1:
+            clearOutputFolder(output_dir)
 
     if os. path. exists(output_dir):
         if len(os.listdir(output_dir)) == 0:
