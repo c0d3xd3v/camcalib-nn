@@ -37,11 +37,10 @@ def generateNumImages(path_to_360_images, output_dir, num, samples):
 
 
 if __name__ == '__main__':
-    path_to_360_images = sys.argv[1] + '*.jpg'
-    output_dir = sys.argv[2] # "continouse_dataset/"
-
     num_samples_peer_image = int(sys.argv[1])
     num_images = int(sys.argv[2])
+    path_to_360_images = sys.argv[3] + '*.jpg'
+    output_dir = sys.argv[4] # "continouse_dataset/"
 
     if os. path. exists(output_dir):
         if len(os.listdir(output_dir)) == 0:
