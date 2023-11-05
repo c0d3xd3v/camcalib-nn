@@ -4,7 +4,7 @@ import os, glob
 import matplotlib.pyplot as plt
 
 import torch.optim as optim
-from torchvision.models import inception_v3, Inception_V3_Weights
+from torchvision.models import inception_v3
 
 from DataSetGeneration.CustomImageDataset import *
 

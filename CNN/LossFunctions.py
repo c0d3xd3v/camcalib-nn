@@ -30,3 +30,12 @@ class NCCLoss(nn.Module):
         std2 = torch.sqrt(torch.sum((Y - mean2) ** 2))
         ncc_loss = 1 - (cross_corr / (std1 * std2))
         return ncc_loss
+
+def selectLossFunction(loss_name):
+    match loss_name:
+        case "ncc":
+            return NCCLoss()
+        case "lch":
+            return LogCoshLoss()
+        case _:
+            return torch.nn.MSELoss()

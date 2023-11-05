@@ -1,3 +1,4 @@
+import os
 import torch
 import pandas as pd
 
@@ -36,10 +37,10 @@ class CustomImageDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.img_labels.iloc[idx, 0]
-        image = read_image(img_path)
+        head, tail = os.path.split(img_path)
+        image = read_image(self.img_dir + tail)
         label = self.img_labels.iloc[idx, 1]
         label2 = self.img_labels.iloc[idx, 2]
-        #print(label)
         if self.transform:
             image = self.transform(image)
         if self.target_transform:

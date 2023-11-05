@@ -58,14 +58,14 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              python generate.py 50 440
-              python train.py 2 32 2.92E-02 0.02 1
+              python generate.py 500 440 data/train_data/ data/continouse_dataset/
+              python train.py 32 2 2.92E-05 0.02 1 data/trainings/lch_orig data/continouse_dataset/ lch
 #              python plot_data.py
 
       - name: Zip build
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              7z a ${{ env.ARTIFACT }} ${{ env.SOURCE_DIR }}/continouse_dataset/loss_history.csv ${{ env.SOURCE_DIR }}/continouse_dataset/checkpoint.pt
+              7z a ${{ env.ARTIFACT }} ${{ env.SOURCE_DIR }}/data/continouse_dataset/loss_history.csv ${{ env.SOURCE_DIR }}/data/continouse_dataset/checkpoint.pt
 
       - name: Save build artifact
         uses: actions/upload-artifact@master

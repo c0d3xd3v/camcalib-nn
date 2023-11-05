@@ -13,12 +13,12 @@ def clearOutputFolder(output_dir):
 # ##############################################################################
 
 
-def generate(path_to_360_images, output_dir, num):
+def generate(path_to_360_images, output_dir, samples):
     starttime = time.process_time()
 
     list_360_image_paths = glob.glob(path_to_360_images)
     for impath in list_360_image_paths:
-        DeepCalibDataset.generateSingleImageProjections(impath, output_dir, num)
+        DeepCalibDataset.generateSingleImageProjections(impath, output_dir, samples)
 
     print("elapsed time ", time.process_time() - starttime)
 # ##############################################################################
@@ -37,8 +37,8 @@ def generateNumImages(path_to_360_images, output_dir, num, samples):
 
 
 if __name__ == '__main__':
-    path_to_360_images = 'data/*.jpg'
-    output_dir = "continouse_dataset/"
+    path_to_360_images = sys.argv[1] + '*.jpg'
+    output_dir = sys.argv[2] # "continouse_dataset/"
 
     num_samples_peer_image = int(sys.argv[1])
     num_images = int(sys.argv[2])

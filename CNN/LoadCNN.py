@@ -20,12 +20,12 @@ def save_ckp(state, checkpoint_dir):
 
 
 def load_ckp(checkpoint_fpath, model, optimizer):
-    epoch = 0
+    iteration = 0
     last_min_loss = float('inf')
     if os.path.isfile(checkpoint_fpath):
         checkpoint = torch.load(checkpoint_fpath)
-        epoch = checkpoint['epoch']
+        iteration = checkpoint['iteration']
         model.load_state_dict(checkpoint['state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         last_min_loss = checkpoint['last_min_loss']
-    return model, optimizer, epoch , last_min_loss
+    return model, optimizer, iteration , last_min_loss
