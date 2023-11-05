@@ -45,7 +45,7 @@ def animate(i):
     ax1.set_ylim(0.0, ax1.get_ylim()[1])
 
     for x in xckp:
-        ax1.axvline(x=x, ymin=0, ymax=ax1.get_ylim()[1], ls=':', c=[1.0, 0.0, 0.0])
+        ax1.axvline(x=x, ymin=0, ymax=ax1.get_ylim()[1], ls=':', c=[0.53, 0.9, 0.15], linewidth=1.3)
     ax1.grid(linestyle='-.', linewidth=0.5)
     ax2.grid(linestyle='-.', linewidth=0.5)
 

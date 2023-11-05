@@ -30,24 +30,14 @@ inceptionV3,optimizer, epochStart, last_min_loss =  load_ckp(output_dir + 'curre
 inceptionV3.eval()
 
 train_dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
-(train_feature, train_label) = next(iter(train_dataloader))
-predicted = inceptionV3(train_feature)
-print("train_label : ")
-print(train_label)
-print("----------------------------")
-print("predicted : ")
-print(predicted)
-print("----------------------------")
-print(torch.sum(predicted - train_label)*0.5)
-
-#sum = 0
-#for epoch, (train_feature, train_label) in enumerate(train_dataloader):
-#    predicted = inceptionV3(train_feature)
-#    print("train_label : ")
-#    print(train_label)
-#    print("predicted : ")
-#    print(predicted)
-#    print(predicted - train_label)
-#    sum = sum + predicted - train_label
-#    print("---------------------------------------")
-#print(sum/len(train_dataloader))
+sum = 0
+for epoch, (train_feature, train_label) in enumerate(train_dataloader):
+    predicted = inceptionV3(train_feature)
+    print("train_label : ")
+    print(train_label)
+    print("predicted : ")
+    print(predicted)
+    print(predicted - train_label)
+    sum = sum + predicted - train_label
+    print("---------------------------------------")
+print(sum/len(train_dataloader))

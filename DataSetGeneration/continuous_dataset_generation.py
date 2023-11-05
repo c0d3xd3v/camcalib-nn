@@ -49,8 +49,11 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
                 y_ref = 1
                 
                 skip = False
-                f = random.randint(250,400)
-                xi = random.uniform(0.012,1.2)
+#                f = random.randint(250,400)
+#                xi = random.uniform(0.012,1.2)
+                f = random.randrange(250, 400, 5)
+                xi = random.randrange(0, 120, 2)
+                xi = xi / 100.
                 fmin = minfocal(u0, v0, xi, x_ref, y_ref)
 
                 # 1. Projection on the camera plane
