@@ -36,15 +36,17 @@ def find_best_lr(model, optimizer, criterion, train_loader):
     return best_lr
 
 if __name__ == "__main__":
-    output_dir = "continouse_dataset/"
-    labels_file = output_dir + "labels.csv"
-    img_dir = output_dir
+
+    output_dir = sys.argv[1]
+    data_dir = sys.argv[2]
+    labels_file = data_dir + "labels.csv"
+    img_dir = data_dir
 
     inceptionV3 = loadInceptionV3Regression()
     criterion = LogCoshLoss()
     optimizer = optim.Adam(inceptionV3.parameters(), foreach=True, amsgrad=True)
     train_loader = loadDeepCaliData(labels_file, img_dir, 2)
-    inceptionV3, optimizer, epochStart, last_min_loss =  load_ckp(output_dir, inceptionV3, optimizer)
+    inceptionV3, optimizer, epochStart, last_min_loss, _ =  load_ckp(output_dir, inceptionV3, optimizer)
 
     best_lr = find_best_lr(inceptionV3, optimizer, criterion, train_loader)
     print('{:.2e}'.format(best_lr))

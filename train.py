@@ -83,15 +83,6 @@ while True:
                 file.close()
             print("saved iteration : " + str(iterationStart + iteration) + ", loss : " + str(loss.item()))
 
-        checkpoint = {
-            'iteration': iteration + 1 + iterationStart,
-            'state_dict': inceptionV3.state_dict(),
-            'optimizer': optimizer.state_dict(),
-            'last_min_loss': last_min_loss,
-            'epoch' : epoch
-        }
-        save_ckp(checkpoint, output_dir + 'current_state.pt')
-
         with open(output_dir + 'loss_history.csv', 'a') as file:
             ep = iterationStart + iteration
             l = loss.item()
@@ -106,8 +97,24 @@ while True:
         diff_h = diff/3600.
         if(diff_h >= 5.0 and time_restrict==1):
             print("time restriciton activated. exit training.")
-            break
+            checkpoint = {
+                'iteration': iteration + 1 + iterationStart,
+                'state_dict': inceptionV3.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'last_min_loss': last_min_loss,
+                'epoch' : epoch
+            }
+            save_ckp(checkpoint, output_dir + 'current_state.pt')
+            sys.exit(0)
+    checkpoint = {
+        'iteration': iteration + 1 + iterationStart,
+        'state_dict': inceptionV3.state_dict(),
+        'optimizer': optimizer.state_dict(),
+        'last_min_loss': last_min_loss,
+        'epoch' : epoch
+    }
+    save_ckp(checkpoint, output_dir + 'current_state.pt')
     if count_epochs + 1 > num_epochs:
-        break
+        sys.exit(0)
     else:
         count_epochs = count_epochs + 1

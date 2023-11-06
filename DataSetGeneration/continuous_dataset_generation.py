@@ -152,7 +152,7 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
             if skip == False:
                 writer = csv.writer(csv_file)
                 file_path = output_path + name_list[0] +'_f_'+str(f)+'_d_'+str(xi)+ '.' +name_list[-1]
-                writer.writerow([file_path, f, 200.0*xi])
+                writer.writerow([file_path, f, xi])
                 gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
                 cv2.imwrite(file_path, im)
         csv_file.close()
