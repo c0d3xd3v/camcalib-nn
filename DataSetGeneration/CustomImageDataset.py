@@ -47,7 +47,7 @@ class CustomImageDataset(Dataset):
             label = self.target_transform(label)
             label2= self.target_transform(label2)
             tlabel = torch.tensor([label, label2])
-        return image, tlabel
+        return image, tlabel, self.img_dir + tail
 
 
 def loadDeepCaliData(labels_file, img_dir, batch_size):

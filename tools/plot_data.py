@@ -12,9 +12,11 @@ def readCSV(path):
     y_data = []
     with open(file_path, 'r') as csvfile:
         reader = csv.reader(csvfile)
+        count = 0
         for row in reader:
-            x_data.append(float(row[0]))
+            x_data.append(float(count))
             y_data.append(float(row[1]))
+            count = count + 1
     return x_data, y_data
 
 def animate(i):
@@ -22,9 +24,11 @@ def animate(i):
         reader = csv.reader(csvfile)
         xar = []
         yar = []
+        count = 0
         for row in reader:
-            xar.append(float(row[0]))
+            xar.append(float(count))
             yar.append(float(row[1]))
+            count = count + 1
 
     with open(output_dir + 'checkpoint_history.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)

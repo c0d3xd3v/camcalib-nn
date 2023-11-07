@@ -46,7 +46,7 @@ if __name__ == "__main__":
     criterion = LogCoshLoss()
     optimizer = optim.Adam(inceptionV3.parameters(), foreach=True, amsgrad=True)
     train_loader = loadDeepCaliData(labels_file, img_dir, 2)
-    inceptionV3, optimizer, epochStart, last_min_loss, _ =  load_ckp(output_dir, inceptionV3, optimizer)
+    inceptionV3, optimizer, _, _, _ =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
 
     best_lr = find_best_lr(inceptionV3, optimizer, criterion, train_loader)
     print('{:.2e}'.format(best_lr))

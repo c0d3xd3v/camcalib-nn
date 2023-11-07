@@ -20,6 +20,7 @@
         "tools/plot_f_d_distribution.py",
         "DataSetGeneration/discrete_dataset_generation.py",
         "tools/GridGenerator.py",
-        "tools/line_detection_cv.py"
+        "tools/line_detection_cv.py",
+        "tools/undistortion.py"
     ]
 }

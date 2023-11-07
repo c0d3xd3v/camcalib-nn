@@ -59,7 +59,7 @@ jobs:
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
               mkdir data/trainings/
-              python generate.py 500 440 data/train_data/ data/continouse_dataset/
+              python generate.py 500 250 data/train_data/ data/continouse_dataset/
               python train.py 32 2 100 2.92E-05 0.02 1 data/trainings/lch_orig data/continouse_dataset/ lch
 #              python plot_data.py
 

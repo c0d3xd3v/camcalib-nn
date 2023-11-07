@@ -23,7 +23,7 @@ loss_function_name = sys.argv[9]
 labels_file = data_dir + "labels.csv"
 img_dir = data_dir
 
-if not os. path. exists(output_dir):
+if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 
 torch.set_num_threads(4)
@@ -52,7 +52,7 @@ while True:
     print("current itr: " + str(iterationStart))
     print("iterations : " + str(len(train_dataloader)))
 
-    for iteration, (train_feature, train_label) in enumerate(train_dataloader):
+    for iteration, (train_feature, train_label, _) in enumerate(train_dataloader):
         # this steep is needed if a cuda device is available
         train_feature, train_label = train_feature.to(device), train_label.to(device)
         # gradient accumuation effectivly effects the batch size.

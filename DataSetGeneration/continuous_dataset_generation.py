@@ -122,12 +122,8 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
                 y_ref = 1
                 
                 skip = False
-                f = random.randint(250,400)
-                xi = random.uniform(0.012,1.2)
-
-                #fov = 2.0*m.atan(0.5*H/f)/m.pi*360.0
-                #print("fov : " + str(fov))
-
+                f = random.randint(230, 450)
+                xi = random.uniform(0.12, 1.0)
                 nx, ny, fmin = generateProjection(f, xi, u0, v0, x_ref, y_ref, grid_x, grid_y,ImPano_W, ImPano_H)
 
                 # 6. Final step interpolation and mapping
@@ -157,6 +153,10 @@ def generateImageProjections(image360, ImPano_W, ImPano_H, image360_path,output_
                 cv2.imwrite(file_path, im)
         csv_file.close()
 
+# def ceil_power_of_10(n):
+#    exp = log(n, 10)
+#    exp = ceil(exp)
+#    return 10**(exp-1)
 
 def generateSingleImageProjections(in_360_image_path, output_path, numImg):
         file_name = in_360_image_path.split('/')[-1]

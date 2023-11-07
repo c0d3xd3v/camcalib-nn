@@ -1,7 +1,7 @@
-# export set PYTHONPATH=/home/kai/Development/densnet-pytorch/DeepCalib/dataset/:/home/kai/Development/densnet-pytorch/DeepCalib/network_training/Regression/Single_net/
-
 import os
 import sys
+import csv
+import math
 
 import torch
 from   torch.utils.data import DataLoader
@@ -30,12 +30,26 @@ inceptionV3,optimizer, epochStart, last_min_loss, _ =  load_ckp(output_dir + 'cu
 inceptionV3.eval()
 
 train_dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
-sum = 0
-for epoch, (train_feature, train_label) in enumerate(train_dataloader):
-    predicted = inceptionV3(train_feature)
-    print("-------------------------")
-    print(train_label)
-    print(predicted)
-    sum = sum + predicted - train_label
+_sum = 0
+_start_ = 0
+file_path = output_dir + 'validate.csv'
+if os.path.exists(file_path):
+    with open(file_path, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        _start_ = sum(1 for row in reader)
+        print(_start_)
+        csvfile.close()
 
-print(sum/len(train_dataloader))
+with open(file_path, 'w') as csvfile:
+    for epoch, (train_feature, train_label, path) in enumerate(train_dataloader):
+        predicted = inceptionV3(train_feature)
+        _sum = _sum + (predicted - train_label)**2
+        print("----------------------------")
+        print(train_label)
+        print(predicted)
+        print("----------------------------")
+        #print(f'{path[0]}, {predicted[0][0]}, {predicted[0][1]}')
+        csvfile.write(f'{path[0]}, {predicted[0][0]}, {predicted[0][1]}\n')
+        _start_ = _start_ + 1
+    csvfile.close()
+    print(math.sqrt(torch.sum(_sum))/len(train_dataloader))
