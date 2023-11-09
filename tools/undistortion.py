@@ -62,6 +62,15 @@ def cropImage(img):
     crop = img[y:y+h, x:x+w]
     return crop
 
+def cropImageToRect(img, rw, rh):
+    img_h, img_w, _ = img.shape
+    x = int(img_w/2 - rw/2)
+    y = int(img_h/2 - rh/2)
+    w = rw
+    h = rh
+    crop = img[y:y+h, x:x+w]
+    return crop
+
 if __name__ == "__main__":
     output_dir = sys.argv[1]
     with open(output_dir, 'r') as file:

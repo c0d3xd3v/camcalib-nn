@@ -5,7 +5,7 @@ import numpy as np
 
 from torchvision.transforms import ToTensor, Compose, ToPILImage
 
-from tools.undistortion import undistSphIm, Params, cropImage
+from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect
 from CNN.LoadCNN import loadInceptionV3Regression, load_eval
 
 cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_16-37-33.mp4')
@@ -59,7 +59,8 @@ while cap.isOpened():
 
         undist_img = undistSphIm(Idis, Paramsd, Paramsund)
         undist_img = np.uint8(undist_img*255)
-        img = cropImage(undist_img)
+        img = cropImageToRect(undist_img, ImW, ImH)
+        #img = cropImage(undist_img)
 
         ImH, ImW, _ = Idis.shape
         maxS = np.max([ImW, ImH])

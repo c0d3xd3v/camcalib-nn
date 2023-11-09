@@ -10,7 +10,7 @@ from torchvision.transforms import ToTensor, Compose, ToPILImage
 
 from CNN.LoadCNN import loadInceptionV3Regression, load_ckp
 
-from tools.undistortion import undistSphIm, Params, cropImage
+from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect
 
 # data/val_dataset/logo_make_11_06_2023_388_f_375_d_0.8412931595250832.jpg
 # data/val_dataset/logo_make_11_06_2023_388_f_387_d_0.6760518991470693.jpg
@@ -49,6 +49,7 @@ Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
 undist_img = undistSphIm(Idis, Paramsd, Paramsund)
 undist_img = np.uint8(undist_img*255)
 img = cropImage(undist_img)
+#img = cropImageToRect(undist_img, ImW, ImH)
 
 ImH, ImW, _ = Idis.shape
 maxS = np.max([ImW, ImH])
