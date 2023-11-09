@@ -47,7 +47,7 @@ def undistSphIm(Idis, Paramsd, Paramsund):
     x_map = X_d.astype(np.float32)
     y_map = Y_d.astype(np.float32)
     for c in range(3):
-        Image_und[:, :, c] = cv2.remap(img[:, :, c], x_map, y_map, interpolation=cv2.INTER_AREA)
+        Image_und[:, :, c] = cv2.remap(img[:, :, c], x_map, y_map, interpolation=cv2.INTER_LINEAR)
     return Image_und
 
 def cropImage(img):
@@ -55,43 +55,47 @@ def cropImage(img):
     _,thresh = cv2.threshold(gray,1, 255, cv2.THRESH_BINARY)
     contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
     cnt = contours[0]
+    for c in contours:
+        if len(c) > len(cnt):
+            cnt = c
     x,y,w,h = cv2.boundingRect(cnt)
-    crop = img[y:y+h,x:x+w]
+    crop = img[y:y+h, x:x+w]
     return crop
 
+if __name__ == "__main__":
+    output_dir = sys.argv[1]
+    with open(output_dir, 'r') as file:
+        reader = csv.reader(file)
 
-output_dir = sys.argv[1]
-with open(output_dir, 'r') as file:
-    reader = csv.reader(file)
+        for row in reader:
+            dist = 0.0
 
-    for row in reader:
-        dist = 0.0
-        print(row[0])
-        f = float(row[1])
-        xi = float(row[2])
-        Idis = cv2.imread(row[0])
+            f = float(row[1])
+            xi = float(row[2])
+            Idis = cv2.imread(row[0])
 
-        dist = dist + xi
-        ImH,ImW,_ = Idis.shape
-        f_dist = f * (ImW/ImH) * (ImH/299)
-        f = f + f_dist
-        u0_dist = ImW/2
-        v0_dist = ImH/2
+            dist = dist + xi
+            ImH,ImW,_ = Idis.shape
+            f_dist = f * (ImW/ImH) * (ImH/299)
+            f = f + f_dist
+            u0_dist = ImW/2
+            v0_dist = ImH/2
 
-        Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
-        Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
+            Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
+            Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
 
-        undist_img = undistSphIm(Idis, Paramsd, Paramsund)
+            undist_img = undistSphIm(Idis, Paramsd, Paramsund)
 
-        undist_img = np.uint8(undist_img)
-        img = cropImage(undist_img)
-        img = cv2.resize(img, (ImW, ImH))
+            undist_img = np.uint8(undist_img)
+            img = cropImage(undist_img)
+            img = cv2.resize(img, (ImW, ImH))
 
-        stackedimg = np.hstack((Idis, img))
+            stackedimg = np.hstack((Idis, img))
 
-        cv2.imshow("Image with Contours", stackedimg)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+            cv2.imshow("Image with Contours", stackedimg)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
-        print(f'f : {Paramsd.f} xi : {Paramsd.xi} dist : {Paramsd.W}')
-    file.close()
+            print(row[0])
+            print(f'f : {Paramsd.f} xi : {Paramsd.xi} dist : {Paramsd.W}')
+        file.close()

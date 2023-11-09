@@ -21,6 +21,8 @@
         "DataSetGeneration/discrete_dataset_generation.py",
         "tools/GridGenerator.py",
         "tools/line_detection_cv.py",
-        "tools/undistortion.py"
+        "tools/undistortion.py",
+        "tools/ImageSegmentation.py",
+        "tools/videocalib.py"
     ]
 }

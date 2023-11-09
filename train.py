@@ -24,7 +24,7 @@ labels_file = data_dir + "labels.csv"
 img_dir = data_dir
 
 if not os.path.exists(output_dir):
-    os.mkdir(output_dir)
+    os.makedirs(output_dir)
 
 torch.set_num_threads(4)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -48,10 +48,16 @@ while True:
     inceptionV3, optimizer, iterationStart, last_min_loss, epoch = load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
 
     epoch = epoch + 1
-    print("epoch      : " + str(epoch))
-    print("current itr: " + str(iterationStart))
-    print("iterations : " + str(len(train_dataloader)))
+    print("epoch         : " + str(epoch))
+    print("batch size    : " + str(batch_size))
+    print("batch acucm   : " + str(batch_accum))
+    print("current itr   : " + str(iterationStart))
+    print("iterations    : " + str(len(train_dataloader)))
+    print("data dir      : " + data_dir)
+    print("output dir    : " + output_dir)
+    print("time_restrict : " + str(time_restrict))
 
+    best_epoch_loss = float('inf')
     for iteration, (train_feature, train_label, _) in enumerate(train_dataloader):
         # this steep is needed if a cuda device is available
         train_feature, train_label = train_feature.to(device), train_label.to(device)
@@ -66,8 +72,16 @@ while True:
         loss.backward()
         optimizer.step()
 
+        do_save_checkpoint = False
         if loss.item() < last_min_loss:
             last_min_loss = loss.item()
+            do_save_checkpoint = True
+
+        if loss.item() < best_epoch_loss:
+            best_epoch_loss = loss.item()
+            do_save_checkpoint = True
+
+        if do_save_checkpoint:
             checkpoint = {
                 'iteration': iteration + 1 + iterationStart,
                 'state_dict': inceptionV3.state_dict(),
@@ -76,11 +90,6 @@ while True:
                 'epoch' : epoch
             }
             save_ckp(checkpoint, output_dir + 'checkpoint.pt')
-            with open(output_dir + 'checkpoint_history.csv', 'a') as file:
-                ep = iterationStart + iteration
-                l = loss.item()
-                file.write(f'{ep},{l}\n')
-                file.close()
             print("saved iteration : " + str(iterationStart + iteration) + ", loss : " + str(loss.item()))
 
         with open(output_dir + 'loss_history.csv', 'a') as file:
@@ -106,6 +115,7 @@ while True:
             }
             save_ckp(checkpoint, output_dir + 'current_state.pt')
             sys.exit(0)
+
     checkpoint = {
         'iteration': iteration + 1 + iterationStart,
         'state_dict': inceptionV3.state_dict(),

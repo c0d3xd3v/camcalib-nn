@@ -7,6 +7,14 @@ output_dir = sys.argv[1]
 file_path = output_dir + 'loss_history.csv'
 fig, (ax1, ax2) = plt.subplots(2)
 
+def moving_average(data, window_size):
+    moving_averages = []
+    for i in range(len(data) - window_size + 1):
+        window = data[i:i + window_size]
+        average = sum(window) / window_size
+        moving_averages.append(average)
+    return moving_averages
+
 def readCSV(path):
     x_data = []
     y_data = []

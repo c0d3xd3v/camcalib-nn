@@ -21,7 +21,7 @@ def setLR(optimizer, new_lr):
 
 def find_best_lr(model, optimizer, criterion, train_loader):
     lr_finder = LRFinder(model, optimizer, criterion)
-    lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
+    lr_finder.range_test(train_loader, accumulation_steps=4, end_lr=100, num_iter=100)
 
     loss = lr_finder.history['loss']
     lr = lr_finder.history['lr']

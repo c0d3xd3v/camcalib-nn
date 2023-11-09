@@ -31,3 +31,9 @@ def load_ckp(checkpoint_fpath, model, optimizer):
         last_min_loss = checkpoint['last_min_loss']
         epoch = checkpoint['epoch'] if 'epoch' in checkpoint.keys() else -1
     return model, optimizer, iteration , last_min_loss, epoch
+
+def load_eval(checkpoint_fpath, model):
+    if os.path.isfile(checkpoint_fpath):
+        checkpoint = torch.load(checkpoint_fpath)
+        model.load_state_dict(checkpoint['state_dict'])
+    return model
