@@ -56,6 +56,7 @@ while True:
     print("data dir      : " + data_dir)
     print("output dir    : " + output_dir)
     print("time_restrict : " + str(time_restrict))
+    print("epochs left   : " + str(num_epochs - epoch))
 
     best_epoch_loss = float('inf')
     for iteration, (train_feature, train_label, _) in enumerate(train_dataloader):
@@ -128,3 +129,4 @@ while True:
         sys.exit(0)
     else:
         count_epochs = count_epochs + 1
+    print('-------------------------------------------------------------------')

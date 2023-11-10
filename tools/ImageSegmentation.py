@@ -62,12 +62,12 @@ img = cropImage(undist_img)
 #img = cropImageToRect(undist_img, ImW, ImH)
 
 ImH, ImW, _ = Idis.shape
-maxS = np.max([ImW, ImH])
+maxS = np.min([ImW, ImH])
 image_size = 400
 img2 = cv2.resize(Idis, (int(ImW/maxS*image_size), int(ImH/maxS*image_size)))
 
 ImH, ImW, _ = img.shape
-maxS = np.max([ImW, ImH])
+maxS = np.min([ImW, ImH])
 img = cv2.resize(img, (int(ImW/maxS*image_size), int(ImH/maxS*image_size)))
 
 stackedimg = np.hstack((img2, img/255))
