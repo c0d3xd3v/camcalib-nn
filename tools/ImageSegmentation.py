@@ -52,7 +52,6 @@ v0_dist = ImH/2
 
 print(f'f : {f} xi : {xi}')
 
-
 Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
 Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
 
@@ -63,13 +62,16 @@ img = cropImage(undist_img)
 
 ImH, ImW, _ = Idis.shape
 maxS = np.min([ImW, ImH])
-image_size = 400
-img2 = cv2.resize(Idis, (int(ImW/maxS*image_size), int(ImH/maxS*image_size)))
+image_size = 300
+S = (int(ImW/maxS*image_size), int(ImH/maxS*image_size))
+img2 = cv2.resize(Idis, S)
 
 ImH, ImW, _ = img.shape
 maxS = np.min([ImW, ImH])
-img = cv2.resize(img, (int(ImW/maxS*image_size), int(ImH/maxS*image_size)))
+img = cv2.resize(img, S)
 
+print(img2.shape)
+print(img.shape)
 stackedimg = np.hstack((img2, img/255))
 
 cv2.imshow("Image with Contours", stackedimg)

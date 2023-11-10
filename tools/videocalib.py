@@ -8,8 +8,9 @@ from torchvision.transforms import ToTensor, Compose, ToPILImage
 from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect, cropRect
 from CNN.LoadCNN import loadInceptionV3Regression, load_eval
 
-cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_16-37-33.mp4')
+cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_13-47-41.mp4')
 count = 0
+length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 model_path = sys.argv[1]
 inceptionV3 = loadInceptionV3Regression()
@@ -24,7 +25,7 @@ n = 0
 
 while cap.isOpened():
     ret,frame = cap.read()
-    if ret != None:
+    if count < length:
         h, w, _ = frame.shape
 
         new_width = 299
@@ -87,8 +88,8 @@ while cap.isOpened():
         cv2.imshow('window-name', stackedimg)
         #cv2.imwrite("frame%d.jpg" % count, frame)
         count = count + 1
-        if cv2.waitKey(10) & 0xFF == ord('q'):
-            break
+    if cv2.waitKey(10) & 0xFF == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows() # destroy all opened windows
