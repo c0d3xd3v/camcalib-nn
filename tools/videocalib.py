@@ -8,7 +8,7 @@ from torchvision.transforms import ToTensor, Compose, ToPILImage
 from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect, cropRect
 from CNN.LoadCNN import loadInceptionV3Regression, load_eval
 
-cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_13-47-41.mp4')
+cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_16-37-33.mp4')
 count = 0
 
 model_path = sys.argv[1]
