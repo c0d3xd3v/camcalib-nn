@@ -38,10 +38,20 @@ xi = predicted[0][1].item()
 dist = 0.0
 dist = dist + xi
 ImH,ImW,_ = Idis.shape
-f_dist = f * (ImW/ImH) * (ImH/299)
+
+# https://github.com/alexvbogdan/DeepCalib/issues/9
+if ImH > ImW:
+    f_scale = (ImH/ImW)*(ImH/299)
+else:
+    f_scale = (ImW/ImH)*(ImW/299)
+
+f_dist = f * f_scale
 f = f + f_dist
 u0_dist = ImW/2
 v0_dist = ImH/2
+
+print(f'f : {f} xi : {xi}')
+
 
 Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
 Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
