@@ -58,18 +58,13 @@ while cap.isOpened():
         u0_dist = ImW/2
         v0_dist = ImH/2
 
-        print(f'f : {f} xi : {xi}')
+        print(f'f : {f_dist} xi : {xi}')
 
         Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
         Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
 
         undist_img = undistSphIm(Idis, Paramsd, Paramsund)
         undist_img = np.uint8(undist_img*255)
-        #img = cropImageToRect(undist_img, ImW, ImH)
-        #x, y, w, h = cropRect(undist_img, ImW, ImH)
-        #color = (255, 0, 0)
-        #thickness = 2
-        #image_with_rectangle = cv2.rectangle(undist_img.copy(), (x, y), (x+w, y+h), color, thickness)
         img = cropImage(undist_img)
 
         ImH, ImW, _ = Idis.shape
@@ -86,7 +81,6 @@ while cap.isOpened():
         print(predicted)
 
         cv2.imshow('window-name', stackedimg)
-        #cv2.imwrite("frame%d.jpg" % count, frame)
         count = count + 1
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
