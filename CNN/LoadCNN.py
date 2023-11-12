@@ -9,10 +9,15 @@ from CNN.DeepCalibOutputLayer import FocAndDisOut
 
 def loadInceptionV3Regression():
     inceptionV3 = torch.hub.load('pytorch/vision:v0.10.0', 'inception_v3', init_weights=False)
-    inceptionV3.fc = FocAndDisOut()
+    inceptionV3.fc = FocAndDisOut(2048)
     inceptionV3.aux_logits = False
     return inceptionV3
 
+def loadMobileNetRegression():
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2')
+    model.classifier = FocAndDisOut(1280)
+#    model.aux_logits = False
+    return model
 
 def save_ckp(state, checkpoint_dir):
     f_path = checkpoint_dir

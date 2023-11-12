@@ -38,13 +38,13 @@ def animate(i):
             yar.append(float(row[1]))
             count = count + 1
 
-    with open(output_dir + 'checkpoint_history.csv', 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        xckp = []
-        yckp = []
-        for row in reader:
-            xckp.append(float(row[0]))
-            yckp.append(float(row[1]))
+    #with open(output_dir + 'checkpoint_history.csv', 'r') as csvfile:
+    #    reader = csv.reader(csvfile)
+    #    xckp = []
+    #    yckp = []
+    #    for row in reader:
+    #        xckp.append(float(row[0]))
+    #        yckp.append(float(row[1]))
 
     ax1.clear()
     ax2.clear()
@@ -56,8 +56,8 @@ def animate(i):
     ax2.set_xlim(len(xar) - 200, len(xar) + 10)
     ax1.set_ylim(0.0, ax1.get_ylim()[1])
 
-    for x in xckp:
-        ax1.axvline(x=x, ymin=0, ymax=ax1.get_ylim()[1], ls=':', c=[1., 0., 0.], linewidth=0.8)
+#    for x in xckp:
+#        ax1.axvline(x=x, ymin=0, ymax=ax1.get_ylim()[1], ls=':', c=[1., 0., 0.], linewidth=0.8)
     ax1.grid(linestyle='-.', linewidth=0.5)
     ax2.grid(linestyle='-.', linewidth=0.5)
 

@@ -23,6 +23,7 @@
         "tools/line_detection_cv.py",
         "tools/undistortion.py",
         "tools/ImageSegmentation.py",
-        "tools/videocalib.py"
+        "tools/videocalib.py",
+        "tools/test_vulkan.py"
     ]
 }

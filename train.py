@@ -4,7 +4,7 @@ import torch
 import torch.optim as optim
 from torchvision.models import inception_v3
 
-from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
+from CNN.LoadCNN import loadInceptionV3Regression, loadMobileNetRegression, save_ckp, load_ckp
 from CNN.LossFunctions import selectLossFunction
 
 from DataSetGeneration.CustomImageDataset import *
@@ -39,6 +39,7 @@ start = time.time()
 loss_fn = selectLossFunction(loss_function_name)
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
 inceptionV3 = loadInceptionV3Regression()
+#inceptionV3 = loadMobileNetRegression()
 inceptionV3.to(device)
 inceptionV3.train()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, weight_decay=l2_lambda, amsgrad=True)

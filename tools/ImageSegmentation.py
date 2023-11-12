@@ -3,6 +3,7 @@ import os, sys
 import cv2
 import numpy as np
 
+import torch
 import torch.optim as optim
 
 from torchvision.io import read_image
@@ -18,6 +19,13 @@ from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect
 path = sys.argv[1]
 model_path = sys.argv[2]
 
+device = torch.device("vulkan" if torch.is_vulkan_available() else "cpu")
+
+if torch.is_vulkan_available():
+    print("use vulkan : yes")
+else:
+    print("use vulkan : no")
+
 image_ = read_image(path)
 transform=Compose([ToPILImage(), ToTensor()])
 image = transform(image_)
@@ -26,6 +34,7 @@ inceptionV3 = loadInceptionV3Regression()
 optimizer = optim.Adam(inceptionV3.parameters())
 inceptionV3, _, _, _, _ = load_ckp(model_path, inceptionV3, optimizer)
 inceptionV3.eval()
+
 predicted = inceptionV3(image.unsqueeze(0))
 
 print(predicted)
