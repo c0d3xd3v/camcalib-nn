@@ -19,13 +19,6 @@ from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect
 path = sys.argv[1]
 model_path = sys.argv[2]
 
-device = torch.device("vulkan" if torch.is_vulkan_available() else "cpu")
-
-if torch.is_vulkan_available():
-    print("use vulkan : yes")
-else:
-    print("use vulkan : no")
-
 image_ = read_image(path)
 transform=Compose([ToPILImage(), ToTensor()])
 image = transform(image_)

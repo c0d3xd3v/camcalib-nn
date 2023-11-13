@@ -36,10 +36,10 @@ else:
 
 start = time.time()
 
-loss_fn = selectLossFunction(loss_function_name)
 train_dataloader = loadDeepCaliData(labels_file, img_dir, batch_size)
-inceptionV3 = loadInceptionV3Regression()
-#inceptionV3 = loadMobileNetRegression()
+loss_fn = selectLossFunction(loss_function_name)
+#inceptionV3 = loadInceptionV3Regression()
+inceptionV3 = loadMobileNetRegression()
 inceptionV3.to(device)
 inceptionV3.train()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, weight_decay=l2_lambda, amsgrad=True)

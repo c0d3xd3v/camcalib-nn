@@ -1,26 +1,35 @@
+import sys
+
 import torch
 import torchvision
 from torch.utils.mobile_optimizer import optimize_for_mobile
 
-from CNN.DeepCalibOutputLayer import FocAndDisOut
-from CNN.LoadCNN import loadMobileNetRegression
+from torchvision.io import read_image
+from torchvision.transforms import ToTensor, Compose, ToPILImage
 
-# does not work, due to the lack of implemented functionality in pytorch
-#model = torchvision.models.inception_v3(weights=None)
-model = torchvision.models.mobilenet_v3_large(weights=None)
-model.classifier = FocAndDisOut(960)
-#model = loadMobileNetRegression()
+from CNN.DeepCalibOutputLayer import FocAndDisOut
+from CNN.LoadCNN import loadMobileNetRegression, load_eval
+
+# inceptionV3 does not work, due to the lack of
+# implemented functionality in pytorch
+
+path = sys.argv[1]
+image_ = read_image(path)
+transform=Compose([ToPILImage(), ToTensor()])
+image = transform(image_)
+image = image.to('vulkan')
+
+model = loadMobileNetRegression()
+model = load_eval('data/trainings/training_mn_2/current_state.pt', model)
 model.eval()
 
 script_model = torch.jit.script(model)
 script_model_vulkan = optimize_for_mobile(script_model, backend='vulkan')
 
-dummy_input = torch.ones(8, 3, 299, 299, dtype=torch.float32)
-dummy_input = dummy_input.to('vulkan')
-
 with torch.no_grad():
     for k in range(100):
-        output = script_model_vulkan.forward(dummy_input)
+#        dummy_input = torch.rand(4, 3, 299, 299, dtype=torch.float32)
+        output = script_model_vulkan(image.unsqueeze(0))
         print(output)
 
 print(script_model_vulkan)
