@@ -10,7 +10,7 @@ from torchvision.transforms import ToTensor, Compose, ToPILImage
 import torch.optim as optim
 
 from DataSetGeneration.CustomImageDataset import *
-from CNN.LoadCNN import loadInceptionV3Regression, save_ckp, load_ckp
+from CNN.LoadCNN import loadInceptionV3Regression, loadMobileNetRegression, save_ckp, load_ckp
 
 
 output_dir = sys.argv[1]
@@ -24,7 +24,8 @@ dataset = CustomImageDataset(labels_file, img_dir,
                             transform=Compose([ToPILImage(), ToTensor()]),
                             target_transform=Compose([float]))
 
-inceptionV3 = loadInceptionV3Regression()
+#inceptionV3 = loadInceptionV3Regression()
+inceptionV3 = loadMobileNetRegression()
 optimizer = optim.Adam(inceptionV3.parameters(), lr=LR, foreach=True, amsgrad=True)
 inceptionV3,optimizer, epochStart, last_min_loss, _ =  load_ckp(output_dir + 'current_state.pt', inceptionV3, optimizer)
 inceptionV3.eval()

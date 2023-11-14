@@ -6,14 +6,15 @@ import numpy as np
 from torchvision.transforms import ToTensor, Compose, ToPILImage
 
 from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect, cropRect
-from CNN.LoadCNN import loadInceptionV3Regression, load_eval
+from CNN.LoadCNN import loadInceptionV3Regression,loadMobileNetRegression,  load_eval
 
-cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_13-47-41.mp4')
+cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_16-37-33.mp4')
 count = 0
 length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 model_path = sys.argv[1]
-inceptionV3 = loadInceptionV3Regression()
+#inceptionV3 = loadInceptionV3Regression()
+inceptionV3 = loadMobileNetRegression()
 inceptionV3 = load_eval(model_path, inceptionV3)
 inceptionV3.eval()
 
@@ -78,7 +79,7 @@ while cap.isOpened():
 
         stackedimg = np.hstack((img2, img/255))
 
-        print(predicted)
+#        print(predicted)
 
         cv2.imshow('window-name', stackedimg)
         count = count + 1

@@ -14,6 +14,7 @@ def loadInceptionV3Regression():
     return inceptionV3
 
 def loadMobileNetRegression():
+    # TODO: use mobilenet_v3_small
     model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2')
     model.classifier = FocAndDisOut(1280)
 #    model.aux_logits = False
