@@ -58,7 +58,6 @@ jobs:
       - name: run python script
         working-directory: ${{ env.SOURCE_DIR }}
         run:  |
-              clinfo
               cat /proc/cpuinfo
 #              python generate.py 50 250 data/train_data/ data/continouse_dataset/
 #              python train.py 32 2 100 2.92E-05 0.02 1 data/trainings/lch_orig/ data/continouse_dataset/ lch
