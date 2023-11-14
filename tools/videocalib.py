@@ -2,13 +2,17 @@ import sys
 import cv2
 
 import numpy as np
+import torch
+from torch.utils.mobile_optimizer import optimize_for_mobile
 
 from torchvision.transforms import ToTensor, Compose, ToPILImage
 
 from tools.undistortion import undistSphIm, Params, cropImage, cropImageToRect, cropRect
 from CNN.LoadCNN import loadInceptionV3Regression,loadMobileNetRegression,  load_eval
 
-cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_16-37-33.mp4')
+# 1032.8441321099276 xi : 0.5448819186794694
+
+cap = cv2.VideoCapture('/home/kai/Downloads/Telegram Desktop/video_2023-11-09_13-47-41.mp4')
 count = 0
 length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
@@ -17,6 +21,10 @@ model_path = sys.argv[1]
 inceptionV3 = loadMobileNetRegression()
 inceptionV3 = load_eval(model_path, inceptionV3)
 inceptionV3.eval()
+
+script_model = torch.jit.script(inceptionV3)
+script_model_vulkan = optimize_for_mobile(script_model, backend='vulkan')
+
 
 transform=Compose([ToPILImage(), ToTensor()])
 
@@ -37,7 +45,8 @@ while cap.isOpened():
         pred_img = cv2.resize(frame, (299, 299), interpolation=cv2.INTER_LINEAR)
         image = transform(new_image)
         pred_img = transform(pred_img)
-        predicted = inceptionV3(pred_img.unsqueeze(0))
+        pred_img = pred_img.to('vulkan')
+        predicted = script_model_vulkan(pred_img.unsqueeze(0))
 
         numpy_image = cv2.merge([image[2].numpy(), image[1].numpy(), image[0].numpy()])
         Idis = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
@@ -59,7 +68,7 @@ while cap.isOpened():
         u0_dist = ImW/2
         v0_dist = ImH/2
 
-        print(f'f : {f_dist} xi : {xi}')
+        #print(f'f : {f_dist} xi : {xi}')
 
         Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
         Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)

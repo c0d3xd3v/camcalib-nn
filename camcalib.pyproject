@@ -25,6 +25,7 @@
         "tools/ImageSegmentation.py",
         "tools/videocalib.py",
         "tools/test_vulkan.py",
-        "tools/cv_umat.py"
+        "tools/cv_umat.py",
+        "tools/mkldnn_test.py"
     ]
 }
