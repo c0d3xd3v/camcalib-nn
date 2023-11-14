@@ -22,9 +22,8 @@ inceptionV3 = loadMobileNetRegression()
 inceptionV3 = load_eval(model_path, inceptionV3)
 inceptionV3.eval()
 
-script_model = torch.jit.script(inceptionV3)
-script_model_vulkan = optimize_for_mobile(script_model, backend='vulkan')
-
+#script_model = torch.jit.script(inceptionV3)
+#script_model_vulkan = optimize_for_mobile(script_model, backend='vulkan')
 
 transform=Compose([ToPILImage(), ToTensor()])
 
@@ -45,8 +44,7 @@ while cap.isOpened():
         pred_img = cv2.resize(frame, (299, 299), interpolation=cv2.INTER_LINEAR)
         image = transform(new_image)
         pred_img = transform(pred_img)
-        pred_img = pred_img.to('vulkan')
-        predicted = script_model_vulkan(pred_img.unsqueeze(0))
+        predicted = inceptionV3(pred_img.unsqueeze(0))
 
         numpy_image = cv2.merge([image[2].numpy(), image[1].numpy(), image[0].numpy()])
         Idis = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
