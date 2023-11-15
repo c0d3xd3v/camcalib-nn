@@ -66,7 +66,7 @@ while cap.isOpened():
         u0_dist = ImW/2
         v0_dist = ImH/2
 
-        #print(f'f : {f_dist} xi : {xi}')
+        print(f'f : {f_dist} xi : {xi}')
 
         Paramsd = Params(int(u0_dist*2), int(v0_dist*2), f_dist, xi)
         Paramsund = Params(3*int(u0_dist*2), 3*int(v0_dist*2), f_dist,  0.0)
